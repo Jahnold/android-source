@@ -11,6 +11,7 @@ public class Loops extends Object {
 		boolean temp = false;
 
 		//********************************** Starts Here *********************************
+		/*old code
 		temp = someBools[7];
 		someBools[7] = someBools[0];
 		someBools[0] = temp;
@@ -26,6 +27,17 @@ public class Loops extends Object {
 		temp = someBools[4];
 		someBools[4] = someBools[3];
 		someBools[3] = temp;
+		*/
+		
+		int x = 7;
+		while (x > 3) {
+			
+			temp = someBools[x];
+			someBools[x] = someBools[7-x];
+			someBools[7-x] = temp;
+			x--;
+			
+		}
 		//********************************** Ends Here ***********************************
 		
 
@@ -47,6 +59,7 @@ public class Loops extends Object {
 		// learn more here: http://www.cafeaulait.org/course/week2/43.html
 
 		//********************************** Starts Here *********************************
+		/* old code
 		numArray[0] = !someBools[0] ? 1 : 0;
 		numArray[1] = !someBools[1] ? 1 : 0;
 		numArray[2] = !someBools[2] ? 1 : 0;
@@ -55,6 +68,13 @@ public class Loops extends Object {
 		numArray[5] = !someBools[5] ? 1 : 0;
 		numArray[6] = !someBools[6] ? 1 : 0;
 		numArray[7] = !someBools[7] ? 1 : 0;
+		*/
+		
+		for (int i = 0; i < numArray.length; i++) {
+			
+			numArray[i] = !someBools[i] ? 1: 0;
+			
+		}
 		//********************************** Ends Here ***********************************
 
 
