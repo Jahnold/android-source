@@ -1,12 +1,14 @@
 package com.bloc.securitypackages.apples;
 
-class Green extends Apple {
+import com.bloc.securitypackages.colors.LimeGreen;
 
-	Green() {
+public class Green extends Apple {
+
+	public Green() {
 		super(Green.class.getSimpleName(), 230, new LimeGreen(), 0.21d);
 	}
 
-	void bite() {
+	public void bite() {
 		setWeight(getWeight() - 0.02d);
 	}
 
