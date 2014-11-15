@@ -1,5 +1,7 @@
 package com.bloc.objects;
 
+import java.lang.String;
+
 class Artist extends Object {
 	// The artist's first name
 	String mFirstName;
@@ -11,5 +13,10 @@ class Artist extends Object {
 	 * @param firstName
 	 * @param lastName
 	 */
-	// CONSTRUCTOR CODE GOES HERE
+	Artist(String firstName, String lastName) {
+
+		this.mFirstName = firstName;
+		this.mLastName = lastName;
+
+	}
 }

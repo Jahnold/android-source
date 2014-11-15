@@ -1,5 +1,7 @@
 package com.bloc.objects;
 
+import java.lang.String;
+
 class Song extends Object {
 	// The ensemble which produced it
 	Ensemble mEnsemble;
@@ -13,7 +15,22 @@ class Song extends Object {
 	 * Side-effects: Assigns some default ensemble, title and
 	 *				 and year of your choosing
 	 */
-	// CONSTRUCTOR CODE GOES HERE
+	Song() {
+
+		// set the title
+		this.mTitle = "The Cave";
+
+		// create two artists
+		Artist mumford = new Artist("Marcus", "Mumford");
+		Artist marshall = new Artist("Winston", "Marshall");
+
+		// stick them in an ensemble
+		this.mEnsemble = new Ensemble("Mumford & Sons", new Artist[] {mumford, marshall});
+
+		// set the year
+		this.mYearReleased = 2007;
+
+	}
 
 	/*
 	 * Partial Constructor
@@ -21,7 +38,13 @@ class Song extends Object {
 	 * @param ensemble the ensemble responsible
 	 * @param title the song title
 	 */
-	// CONSTRUCTOR CODE GOES HERE
+	Song(Ensemble ensemble, String title) {
+
+		this.mTitle = title;
+		this.mYearReleased = 0;
+		this.mEnsemble = ensemble;
+
+	}
 
 	/*
 	 * Full Constructor
@@ -29,5 +52,11 @@ class Song extends Object {
 	 * @param title the song title
 	 * @param yearReleased the year the song was released
 	 */
-	// CONSTRUCTOR CODE GOES HERE
+	Song(Ensemble ensemble, String title, int yearReleased) {
+
+		this.mTitle = title;
+		this.mYearReleased = yearReleased;
+		this.mEnsemble = ensemble;
+
+	}
 }
