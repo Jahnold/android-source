@@ -7,9 +7,13 @@ public class Main extends Object {
 	public static void main(String [] args) {
 
 		ToyBox toyBox = new ToyBox();
-		/*
-		 * Put a bunch of Toys in toyBox!
-		 */
+
+		// add a new toy of type "Thing"
+		// Toy has a constructor which takes 1 arguement
+		// we create a new object from a subclass of Thing and pass this
+		toyBox.addToy(new Toy<Thing>(new ActionFigure()) );
+		toyBox.addToy(new Toy<Thing>(new Book()) );
+		toyBox.addToy(new Toy<Thing>(new Spoon()) );
 
 		assert toyBox.getToyCount() > 0 : "Let's get some toys in that box!";
 		System.out.println("Inside your toybox you've got:");
