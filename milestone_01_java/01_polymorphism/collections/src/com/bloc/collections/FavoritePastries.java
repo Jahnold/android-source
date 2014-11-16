@@ -1,6 +1,12 @@
 package com.bloc.collections;
 
+import java.lang.Integer;
+import java.lang.String;
 import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 
 /*
  * FavoritePastries
@@ -23,9 +29,12 @@ public class FavoritePastries {
 	 * Use a HashMap to store the relationship
 	 * between rating and pastry
 	 */
+	private HashMap<Pastry, Integer> mPastryMap;
 
 	public FavoritePastries() {
-		// WORK HERE
+
+		// instantiate the HashMap
+		mPastryMap = new HashMap<Pastry, Integer>();
 	}
 
 	/* 
@@ -42,7 +51,7 @@ public class FavoritePastries {
 	 * @return nothing
 	 */
 	public void addPastry(Pastry pastry, int rating) {
-		// WORK HERE
+		mPastryMap.put(pastry, rating);
 	}
 
 	/*
@@ -56,8 +65,17 @@ public class FavoritePastries {
 	 *		   false otherwise
 	 */
 	public boolean removePastry(Pastry pastry) {
-		// WORK HERE
-		return false;
+
+		if (mPastryMap.containsKey(pastry)) {
+			// key found - remove pastry
+			mPastryMap.remove(pastry);
+			return true;
+		}
+		else {
+			// key not found
+			return false;
+		}
+
 	}
 
 	/*
@@ -73,8 +91,13 @@ public class FavoritePastries {
 	 *		   -1 if not found among FavoritePastries
 	 */
 	public int getRatingForPastry(Pastry pastry) {
-		// WORK HERE
-		return -1;
+
+		if (mPastryMap.containsKey(pastry)) {
+			return mPastryMap.get(pastry);
+		}
+		else{
+			return -1;
+		}
 	}
 
 	/*
@@ -92,8 +115,19 @@ public class FavoritePastries {
 	 *         found
 	 */
 	public Collection<Pastry> getPastriesForRating(int rating) {
-		// WORK HERE
-		return null;
+
+		Collection<Pastry> foundPastries = new ArrayList<Pastry>();
+
+		// interate through the hashmap
+		for (Map.Entry<Pastry, Integer> pastry : mPastryMap.entrySet()) {
+
+			// check if this is the value we're looking for
+			if (pastry.getValue() == rating) {
+				foundPastries.add(pastry.getKey());
+			}
+		}
+
+		return foundPastries;
 	}
 
 }
