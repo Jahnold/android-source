@@ -18,6 +18,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.bloc.blocnotes.ui.NoteFragment;
+
 
 public class BlocNotes extends Activity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
@@ -26,6 +28,7 @@ public class BlocNotes extends Activity
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
     private NavigationDrawerFragment mNavigationDrawerFragment;
+    private NoteFragment mNoteFragment;
 
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
@@ -45,6 +48,10 @@ public class BlocNotes extends Activity
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
+
+        // instantiate my note fragment
+        mNoteFragment = new NoteFragment();
+        getFragmentManager().beginTransaction().add(R.id.container, mNoteFragment).commit();
     }
 
     @Override
