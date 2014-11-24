@@ -50,8 +50,15 @@ public class BlocNotes extends Activity
                 (DrawerLayout) findViewById(R.id.drawer_layout));
 
         // instantiate my note fragment
-        mNoteFragment = new NoteFragment();
-        getFragmentManager().beginTransaction().add(R.id.container, mNoteFragment).commit();
+
+        //mNoteFragment = new NoteFragment();
+        //getFragmentManager().beginTransaction().add(R.id.container, mNoteFragment).commit();
+
+        mNoteFragment = (NoteFragment)
+                //getFragmentManager().findFragmentById(R.id.fragment_note);
+                getFragmentManager().findFragmentById(R.layout.fragment_note);
+
+
     }
 
     @Override
