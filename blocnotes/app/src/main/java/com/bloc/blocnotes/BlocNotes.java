@@ -22,9 +22,10 @@ import android.widget.TextView;
 import com.bloc.blocnotes.ui.NoteFragment;
 
 
-public class BlocNotes extends FragmentActivity
+public class BlocNotes extends Activity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
+    private static final String TAG = "BlocNotesActivity";
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
@@ -50,19 +51,24 @@ public class BlocNotes extends FragmentActivity
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
 
-        // instantiate my note fragment
-        if (savedInstanceState != null) {
 
-            // there is a saved instance, find our fragment using the tag we gave it
-            mNoteFragment = (NoteFragment) getFragmentManager().findFragmentByTag("mNoteFragment");
-            //TODO I think there might be something missing here
-        }
-        else {
+        // get a reference to the fragment manager
+        FragmentManager fm = getFragmentManager();
 
-            // no saved instance...create a new fragment
-            mNoteFragment = new NoteFragment();
-            // add with a tag so we can find it again later
-            getFragmentManager().beginTransaction().add(R.id.container, mNoteFragment, "mNoteFragment").commit();
+        // try and retrieve a reference to our note fragment from the fragment manager
+        Fragment noteFragment = fm.findFragmentById(R.id.fragment_note);
+
+        if (noteFragment == null) {
+
+            // noteFragment does not yet exist in the Fragment Manager
+
+            // instantiate one
+            noteFragment = new NoteFragment();
+
+            // add it to the fragment manager
+            fm.beginTransaction()
+                    .add(R.id.container, noteFragment)
+                    .commit();
         }
 
 

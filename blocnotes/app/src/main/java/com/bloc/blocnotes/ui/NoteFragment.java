@@ -17,6 +17,7 @@ import com.bloc.blocnotes.R;
 
 public class NoteFragment extends Fragment {
 
+    private static final String KEY_INDEX  = "noteText";
     private EditText mEditText;
 
     public NoteFragment() {
@@ -27,9 +28,6 @@ public class NoteFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        //TODO is this needed?
-        super.onCreateView(inflater,container,savedInstanceState);
-
         // create a reference to our fragment view
         View rootView = inflater.inflate(R.layout.fragment_note, container, false);
 
@@ -37,19 +35,16 @@ public class NoteFragment extends Fragment {
         mEditText = (EditText) rootView.findViewById(R.id.et_note);
 
         // check whether our note text is saved in the bundle
-        //
-        //TODO I tried using .containsKey here but it threw a NullPointerException?
         if (savedInstanceState != null) {
 
-            Log.d("matt get", savedInstanceState.getString("noteText"));
-
             // it is so put it back in our EditText
-            mEditText.setText(savedInstanceState.getString("noteText"));
+            mEditText.setText(savedInstanceState.getString(KEY_INDEX));
         }
 
         // return the view
         return rootView;
     }
+
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
@@ -57,22 +52,11 @@ public class NoteFragment extends Fragment {
         // run the super
         super.onSaveInstanceState(savedInstanceState);
 
-        // check what value we're getting
-        Log.d("matt set", mEditText.getText().toString());
-
         // add the text of our editText to the saved state
-        savedInstanceState.putString("noteText", mEditText.getText().toString());
+        savedInstanceState.putString(KEY_INDEX, mEditText.getText().toString());
 
     }
 
-//    public void onActivityCreated(Bundle savedInstanceState) {
-//
-//        super.onActivityCreated(savedInstanceState);
-//
-//        if (savedInstanceState != null) {
-//
-//            mEditText.setText(savedInstanceState.getString("noteText"));
-//        }
-//    }
+
 
 }
