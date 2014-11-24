@@ -59,7 +59,7 @@ public class BlocNotes extends Activity
         not sure what each of these different syntaxes does
         discuss with John
          */
-
+        //TODO
         //mNoteFragment = (NoteFragment)
                 //getFragmentManager().findFragmentById(R.id.fragment_note);
                 //getFragmentManager().findFragmentById(R.layout.fragment_note);
