@@ -24,23 +24,14 @@ public class NoteFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        // instantiate our layout
-        LinearLayout linearLayout = new LinearLayout(getActivity());
+        // create a reference to our fragment view
+        View rootView = inflater.inflate(R.layout.fragment_note, container, false);
 
+        // it said to create a reference to our edit text...doesn't explain why
+        EditText editText = (EditText) rootView.findViewById(R.id.et_note);
 
-        // set the params of our layout
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-        );
-
-        // instantiate our text area
-        EditText editText = new EditText(getActivity());
-
-        // add the text area to the layout using our params
-        linearLayout.addView(editText, params);
-
-        return linearLayout;
+        // return the view
+        return rootView;
     }
 
 }
