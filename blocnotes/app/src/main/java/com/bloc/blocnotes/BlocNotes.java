@@ -51,12 +51,18 @@ public class BlocNotes extends Activity
 
         // instantiate my note fragment
 
-        //mNoteFragment = new NoteFragment();
-        //getFragmentManager().beginTransaction().add(R.id.container, mNoteFragment).commit();
+        mNoteFragment = new NoteFragment();
+        getFragmentManager().beginTransaction().add(R.id.container, mNoteFragment).commit();
 
-        mNoteFragment = (NoteFragment)
+        /*
+        These two below didn't work
+        not sure what each of these different syntaxes does
+        discuss with John
+         */
+
+        //mNoteFragment = (NoteFragment)
                 //getFragmentManager().findFragmentById(R.id.fragment_note);
-                getFragmentManager().findFragmentById(R.layout.fragment_note);
+                //getFragmentManager().findFragmentById(R.layout.fragment_note);
 
 
     }
