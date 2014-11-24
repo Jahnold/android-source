@@ -27,6 +27,9 @@ public class NoteFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+        //TODO is this needed?
+        super.onCreateView(inflater,container,savedInstanceState);
+
         // create a reference to our fragment view
         View rootView = inflater.inflate(R.layout.fragment_note, container, false);
 
@@ -34,8 +37,8 @@ public class NoteFragment extends Fragment {
         mEditText = (EditText) rootView.findViewById(R.id.et_note);
 
         // check whether our note text is saved in the bundle
-        // I tried using .containsKey here but it threw a NullPointerException?
-        //TODO
+        //
+        //TODO I tried using .containsKey here but it threw a NullPointerException?
         if (savedInstanceState != null) {
 
             Log.d("matt get", savedInstanceState.getString("noteText"));
@@ -62,5 +65,14 @@ public class NoteFragment extends Fragment {
 
     }
 
+//    public void onActivityCreated(Bundle savedInstanceState) {
+//
+//        super.onActivityCreated(savedInstanceState);
+//
+//        if (savedInstanceState != null) {
+//
+//            mEditText.setText(savedInstanceState.getString("noteText"));
+//        }
+//    }
 
 }

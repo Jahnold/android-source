@@ -8,6 +8,7 @@ import android.app.FragmentManager;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -21,7 +22,7 @@ import android.widget.TextView;
 import com.bloc.blocnotes.ui.NoteFragment;
 
 
-public class BlocNotes extends Activity
+public class BlocNotes extends FragmentActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
     /**
@@ -50,9 +51,20 @@ public class BlocNotes extends Activity
                 (DrawerLayout) findViewById(R.id.drawer_layout));
 
         // instantiate my note fragment
+        if (savedInstanceState != null) {
 
-        mNoteFragment = new NoteFragment();
-        getFragmentManager().beginTransaction().add(R.id.container, mNoteFragment).commit();
+            // there is a saved instance, find our fragment using the tag we gave it
+            mNoteFragment = (NoteFragment) getFragmentManager().findFragmentByTag("mNoteFragment");
+            //TODO I think there might be something missing here
+        }
+        else {
+
+            // no saved instance...create a new fragment
+            mNoteFragment = new NoteFragment();
+            // add with a tag so we can find it again later
+            getFragmentManager().beginTransaction().add(R.id.container, mNoteFragment, "mNoteFragment").commit();
+        }
+
 
         /*
         These two below didn't work
@@ -66,6 +78,7 @@ public class BlocNotes extends Activity
 
 
     }
+
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
