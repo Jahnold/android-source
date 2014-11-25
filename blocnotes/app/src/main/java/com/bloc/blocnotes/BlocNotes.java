@@ -43,17 +43,18 @@ public class BlocNotes extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bloc_notes);
 
+
         // get a reference to the fragment manager
         FragmentManager fm = getFragmentManager();
 
-        mNavigationDrawerFragment = (NavigationDrawerFragment)
-                fm.findFragmentById(R.id.navigation_drawer);
+        mNavigationDrawerFragment = (NavigationDrawerFragment) fm.findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
 
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
-                (DrawerLayout) findViewById(R.id.drawer_layout));
+                (DrawerLayout) findViewById(R.id.drawer_layout)
+        );
 
 
         // try and retrieve a reference to our note fragment from the fragment manager
@@ -78,17 +79,16 @@ public class BlocNotes extends Activity
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
-        // update the main content by replacing fragments
-//        FragmentManager fragmentManager = getFragmentManager();
-//        fragmentManager.beginTransaction()
-//                .replace(R.id.container, mNoteFragment)
-//                .commit();
+
+        // if user has clicked on the new notepad draw item show a toast
+
+
     }
 
     public void onSectionAttached(int number) {
         switch (number) {
             case 1:
-                mTitle = getString(R.string.title_section1);
+                mTitle = getString(R.string.action_add_notebook);
                 break;
             case 2:
                 mTitle = getString(R.string.title_section2);

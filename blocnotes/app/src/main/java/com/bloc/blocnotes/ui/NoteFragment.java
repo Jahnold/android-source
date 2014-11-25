@@ -6,6 +6,9 @@ import android.os.Bundle;
 import android.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -23,6 +26,15 @@ public class NoteFragment extends Fragment {
     public NoteFragment() {
 
 
+    }
+
+    @Override
+    public void onCreate(Bundle bundle) {
+
+        super.onCreate(bundle);
+
+        // tell android that this fragment has a menu
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -45,19 +57,10 @@ public class NoteFragment extends Fragment {
         return rootView;
     }
 
-//    @Override
-//    public void onViewStateRestored(Bundle savedInstanceState) {
-//
-//        super.onViewStateRestored(savedInstanceState);
-//
-//        if (savedInstanceState != null && savedInstanceState.containsKey(KEY_INDEX)) {
-//
-//            // it is so put it back in our EditText
-//            mEditText.setText(savedInstanceState.getString(KEY_INDEX));
-//        }
-//    }
-
-
+    /*
+        save the state of our editText into the bundle
+        so that it is not lost in between screen rotations, etc
+    */
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
 
@@ -69,6 +72,39 @@ public class NoteFragment extends Fragment {
 
     }
 
+    /*
+    *   Add the menu items specific to our fragment to the actionbar
+    */
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 
+        super.onCreateOptionsMenu(menu,inflater);
+
+        // inflate my menu for this fragment
+        inflater.inflate(R.menu.note_fragment,menu);
+
+    }
+
+    /*
+    *   This is where the menu item events are caught
+    */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+
+        switch (menuItem.getItemId()) {
+
+            case R.id.action_erase_note:
+
+                // clear any text currently in the edittext
+                mEditText.setText("");
+                return true;
+
+            default:
+
+                return super.onOptionsItemSelected(menuItem);
+        }
+
+
+    }
 
 }

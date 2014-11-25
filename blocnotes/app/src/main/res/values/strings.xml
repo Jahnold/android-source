@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">BlocNotes</string>
-    <string name="title_section1">My First Draw</string>
+    <string name="title_section1">Main</string>
     <string name="title_section2">Another One</string>
     <string name="title_section3">It Generated 3</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -11,4 +11,6 @@
     <string name="action_settings">Settings</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <string name="action_add_notebook">Add Notebook</string>
+    <string name="action_erase_note">Erase</string>
 </resources>
