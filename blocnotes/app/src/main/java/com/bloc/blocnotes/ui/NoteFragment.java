@@ -18,7 +18,7 @@ import com.bloc.blocnotes.R;
 public class NoteFragment extends Fragment {
 
     private static final String KEY_INDEX  = "noteText";
-    private EditText mEditText;
+    protected EditText mEditText;
 
     public NoteFragment() {
 
@@ -35,7 +35,7 @@ public class NoteFragment extends Fragment {
         mEditText = (EditText) rootView.findViewById(R.id.et_note);
 
         // check whether our note text is saved in the bundle
-        if (savedInstanceState != null) {
+        if (savedInstanceState != null && savedInstanceState.containsKey(KEY_INDEX)) {
 
             // it is so put it back in our EditText
             mEditText.setText(savedInstanceState.getString(KEY_INDEX));
@@ -44,6 +44,18 @@ public class NoteFragment extends Fragment {
         // return the view
         return rootView;
     }
+
+//    @Override
+//    public void onViewStateRestored(Bundle savedInstanceState) {
+//
+//        super.onViewStateRestored(savedInstanceState);
+//
+//        if (savedInstanceState != null && savedInstanceState.containsKey(KEY_INDEX)) {
+//
+//            // it is so put it back in our EditText
+//            mEditText.setText(savedInstanceState.getString(KEY_INDEX));
+//        }
+//    }
 
 
     @Override
