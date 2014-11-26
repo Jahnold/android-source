@@ -149,4 +149,11 @@ public class BlocNotes extends Activity
 
     }
 
+
+    public void onStyleChange(CustomStyleDialogFragment dialog, int styeId) {}
+
+    public void onFontChange(CustomStyleDialogFragment dialog, String fontName) {}
+
+    public void onThemeChange(CustomStyleDialogFragment dialog, int themeId) {}
+
 }
