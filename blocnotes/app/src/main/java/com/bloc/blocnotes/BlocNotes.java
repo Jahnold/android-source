@@ -20,6 +20,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.bloc.blocnotes.ui.CustomStyleDialogFragment;
 import com.bloc.blocnotes.ui.NoteFragment;
 
 
@@ -126,50 +127,26 @@ public class BlocNotes extends Activity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-//    public static class PlaceholderFragment extends Fragment {
-//        /**
-//         * The fragment argument representing the section number for this
-//         * fragment.
-//         */
-//        private static final String ARG_SECTION_NUMBER = "section_number";
-//
-//        /**
-//         * Returns a new instance of this fragment for the given section
-//         * number.
-//         */
-//        public static PlaceholderFragment newInstance(int sectionNumber) {
-//            PlaceholderFragment fragment = new PlaceholderFragment();
-//            Bundle args = new Bundle();
-//            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-//            fragment.setArguments(args);
-//            return fragment;
-//        }
-//
-//        public PlaceholderFragment() {
-//        }
-//
-//        @Override
-//        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//                Bundle savedInstanceState) {
-//            View rootView = inflater.inflate(R.layout.fragment_bloc_notes, container, false);
-//            return rootView;
-//        }
-//
-//        @Override
-//        public void onAttach(Activity activity) {
-//            super.onAttach(activity);
-//            ((BlocNotes) activity).onSectionAttached(
-//                    getArguments().getInt(ARG_SECTION_NUMBER));
-//        }
-//    }
+        switch(id) {
+
+            case R.id.action_settings:
+
+                // does nothing, just return true
+                return true;
+
+            case R.id.action_style_dialog:
+
+                // display our customise view dialog
+                CustomStyleDialogFragment dialog = new CustomStyleDialogFragment();
+                dialog.show(getFragmentManager(),null);
+                return true;
+
+            default:
+
+                return super.onOptionsItemSelected(item);
+        }
+
+    }
 
 }

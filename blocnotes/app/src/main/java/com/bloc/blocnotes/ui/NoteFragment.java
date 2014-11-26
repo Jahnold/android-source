@@ -22,6 +22,7 @@ public class NoteFragment extends Fragment {
 
     private static final String KEY_INDEX  = "noteText";
     protected EditText mEditText;
+    private boolean mIsMenuInflated = false;
 
     public NoteFragment() {
 
@@ -80,8 +81,15 @@ public class NoteFragment extends Fragment {
 
         super.onCreateOptionsMenu(menu,inflater);
 
-        // inflate my menu for this fragment
-        inflater.inflate(R.menu.note_fragment,menu);
+        // check if the menu has been inflated
+        if (!mIsMenuInflated) {
+
+            // if not inflate the menu for this fragment
+            inflater.inflate(R.menu.note_fragment,menu);
+
+            // set the boolean to true so that it doesn't get inflated again
+            mIsMenuInflated = true;
+        }
 
     }
 
