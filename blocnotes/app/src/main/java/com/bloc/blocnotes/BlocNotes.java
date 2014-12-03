@@ -6,6 +6,7 @@ import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -23,6 +24,9 @@ import android.widget.TextView;
 import com.bloc.blocnotes.ui.CustomStyleDialogFragment;
 import com.bloc.blocnotes.ui.NoteFragment;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 public class BlocNotes extends Activity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
@@ -33,6 +37,7 @@ public class BlocNotes extends Activity
      */
     private NavigationDrawerFragment mNavigationDrawerFragment;
     private NoteFragment mNoteFragment;
+
 
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
@@ -52,25 +57,22 @@ public class BlocNotes extends Activity
         mTitle = getTitle();
 
         // Set up the drawer.
-        mNavigationDrawerFragment.setUp(
-                R.id.navigation_drawer,
-                (DrawerLayout) findViewById(R.id.drawer_layout)
-        );
+        mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
 
 
         // try and retrieve a reference to our note fragment from the fragment manager
-        Fragment noteFragment = fm.findFragmentById(R.id.fragment_note);
+        mNoteFragment = (NoteFragment) fm.findFragmentById(R.id.fragment_note);
 
-        if (noteFragment == null || noteFragment.isDetached()) {
+        if (mNoteFragment == null || mNoteFragment.isDetached()) {
 
             // noteFragment does not yet exist in the Fragment Manager
 
             // instantiate one
-            noteFragment = new NoteFragment();
+            mNoteFragment = new NoteFragment();
 
             // add it to the fragment manager
             fm.beginTransaction()
-                    .add(R.id.container, noteFragment)
+                    .add(R.id.container, mNoteFragment)
                     .commit();
         }
 
@@ -114,8 +116,12 @@ public class BlocNotes extends Activity
             // Only show items in the action bar relevant to this screen
             // if the drawer is not showing. Otherwise, let the drawer
             // decide what to show in the action bar.
+            menu.clear();
+
             getMenuInflater().inflate(R.menu.bloc_notes, menu);
-            restoreActionBar();
+
+            //restoreActionBar();
+
             return true;
         }
         return super.onCreateOptionsMenu(menu);
@@ -152,7 +158,24 @@ public class BlocNotes extends Activity
 
     public void onStyleChange(CustomStyleDialogFragment dialog, int styeId) {}
 
-    public void onFontChange(CustomStyleDialogFragment dialog, String fontName) {}
+
+    /* Change the font of the editview
+    *
+    */
+    public void onFontChange(CustomStyleDialogFragment dialog, String fontName) {
+
+        // create a map of font names to paths
+        Map<String, String> fontPaths = new HashMap<String, String>();
+        fontPaths.put("Helvetica", "fonts/Helvetica_Reg.ttf");
+        fontPaths.put("Helvetica-Neue", "fonts/HelveticaNeue_Lt.ttf");
+        fontPaths.put("Impact", "fonts/impact.ttf");
+        fontPaths.put("Default", "Default");
+
+
+        // call the set font method of the fragment
+        mNoteFragment.setFont(fontPaths.get(fontName));
+
+    }
 
     public void onThemeChange(CustomStyleDialogFragment dialog, int themeId) {}
 

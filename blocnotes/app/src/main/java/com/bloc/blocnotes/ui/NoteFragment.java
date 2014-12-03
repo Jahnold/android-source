@@ -1,6 +1,7 @@
 package com.bloc.blocnotes.ui;
 
 import android.app.Activity;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -22,7 +23,7 @@ public class NoteFragment extends Fragment {
 
     private static final String KEY_INDEX  = "noteText";
     protected EditText mEditText;
-    private boolean mIsMenuInflated = false;
+    private static boolean mIsMenuInflated = false;
 
     public NoteFragment() {
 
@@ -79,17 +80,14 @@ public class NoteFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 
-        super.onCreateOptionsMenu(menu,inflater);
 
-        // check if the menu has been inflated
-        if (!mIsMenuInflated) {
+        if (menu.findItem(R.id.action_erase_note) == null) {
 
-            // if not inflate the menu for this fragment
             inflater.inflate(R.menu.note_fragment,menu);
 
-            // set the boolean to true so that it doesn't get inflated again
-            mIsMenuInflated = true;
         }
+
+        super.onCreateOptionsMenu(menu,inflater);
 
     }
 
@@ -112,6 +110,25 @@ public class NoteFragment extends Fragment {
                 return super.onOptionsItemSelected(menuItem);
         }
 
+
+    }
+
+    /* Change the font of mEditText to whichever font is passed in
+    *
+    */
+    public void setFont(String fontPath) {
+
+        Typeface font;
+
+        // check for default, otherwise load font from file
+        if (fontPath.equals("Default")) {
+            font = Typeface.DEFAULT;
+        }
+        else {
+            font = Typeface.createFromAsset(getActivity().getAssets(), fontPath);
+        }
+
+        mEditText.setTypeface(font);
 
     }
 

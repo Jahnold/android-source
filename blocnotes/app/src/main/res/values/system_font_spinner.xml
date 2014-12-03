@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="system_fonts">
-        <item>Helvestica</item>
+        <item>Default</item>
+        <item>Helvetica</item>
         <item>Helvetica-Neue</item>
         <item>Impact</item>
     </string-array>
