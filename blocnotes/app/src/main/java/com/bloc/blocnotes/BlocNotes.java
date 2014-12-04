@@ -155,8 +155,14 @@ public class BlocNotes extends Activity
 
     }
 
+    /* Change the font size of the editview
+    *
+    */
+    public void onStyleChange(CustomStyleDialogFragment dialog, int styeId) {
 
-    public void onStyleChange(CustomStyleDialogFragment dialog, int styeId) {}
+        mNoteFragment.setTextAppearance(styeId);
+
+    }
 
 
     /* Change the font of the editview
@@ -178,5 +184,6 @@ public class BlocNotes extends Activity
     }
 
     public void onThemeChange(CustomStyleDialogFragment dialog, int themeId) {}
+
 
 }

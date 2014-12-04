@@ -122,4 +122,19 @@ public class NoteFragment extends Fragment {
 
     }
 
+    public void setTextAppearance(int size) {
+
+        switch (size) {
+            case 0:
+                mEditText.setTextAppearance(getActivity(), android.R.style.TextAppearance_Small);
+                break;
+            case 1:
+                mEditText.setTextAppearance(getActivity(), android.R.style.TextAppearance_Medium);
+                break;
+            case 2:
+                mEditText.setTextAppearance(getActivity(), android.R.style.TextAppearance_Large);
+                break;
+        }
+    }
+
 }

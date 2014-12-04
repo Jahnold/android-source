@@ -2,6 +2,7 @@ package com.bloc.blocnotes.ui;
 
 import android.app.Activity;
 import android.app.DialogFragment;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -10,13 +11,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 
 import com.bloc.blocnotes.BlocNotes;
 import com.bloc.blocnotes.R;
 
 
-public class CustomStyleDialogFragment extends DialogFragment implements AdapterView.OnItemSelectedListener {
+public class CustomStyleDialogFragment extends DialogFragment {
 
 
     private static int mSpinnerPosition = 0;
@@ -41,6 +43,11 @@ public class CustomStyleDialogFragment extends DialogFragment implements Adapter
         // set the dialog title
         getDialog().setTitle("Customize View");
 
+        /*
+        *   Font Spinner
+        *   ~~~~~~~~~~~~
+        */
+
         // set the values in the font spinner
         Spinner spinner = (Spinner) view.findViewById(R.id.system_font_spinner);
 
@@ -53,35 +60,66 @@ public class CustomStyleDialogFragment extends DialogFragment implements Adapter
 
         spinner.setAdapter(adapter);
 
-        // set a listener for when the spinner changes - it will be the blocnotes activity
-        spinner.setOnItemSelectedListener(this);
+        // set a listener for when the spinner changes
+        final CustomStyleDialogFragment dialogFragment = this;
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+
+                // spinner item has been selected
+                // call the onFontChange method of the BlocNotes activity
+                ((BlocNotes) getActivity()).onFontChange(dialogFragment, parent.getItemAtPosition(pos).toString());
+
+                // set the mFont to keep track of the current font selection
+                mSpinnerPosition = pos;
+
+            }
+
+            public void onNothingSelected(AdapterView<?> parent) {}
+
+        });
 
         // set the spinner to whatever the current font is
         spinner.setSelection(mSpinnerPosition);
+
+        /*
+        *   Style Buttons
+        *   ~~~~~~~~~~~~~
+        */
+
+        Button btnSmall = (Button) view.findViewById(R.id.btn_small);
+        Button btnMedium = (Button) view.findViewById(R.id.btn_medium);
+        Button btnLarge = (Button) view.findViewById(R.id.btn_large);
+
+        btnSmall.setOnClickListener(styleButtonListener);
+        btnMedium.setOnClickListener(styleButtonListener);
+        btnLarge.setOnClickListener(styleButtonListener);
 
         // Inflate the layout for this fragment
         return view;
 
     }
 
-    /* Interface callback method for the spinner listener
+    /* Listener for the Style Buttons
     *
     */
-    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+    private View.OnClickListener styleButtonListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.btn_small:
+                    ((BlocNotes) getActivity()).onStyleChange(null,0);
+                    break;
 
-        // spinner item has been selected
-        // call the onFontChange method of the BlocNotes activity
-        ((BlocNotes) getActivity()).onFontChange(this, parent.getItemAtPosition(pos).toString());
+                case R.id.btn_medium:
+                    ((BlocNotes) getActivity()).onStyleChange(null,1);
+                    break;
 
-        // set the mFont to keep track of the current font selection
-        mSpinnerPosition = pos;
-
-    }
-
-    public void onNothingSelected(AdapterView<?> parent) {
-
-        // Another interface callback
-    }
-
+                case R.id.btn_large:
+                    ((BlocNotes) getActivity()).onStyleChange(null,2);
+                    break;
+            }
+        }
+    };
 
 }
