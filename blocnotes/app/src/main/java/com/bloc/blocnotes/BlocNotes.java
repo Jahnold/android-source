@@ -60,8 +60,8 @@ public class BlocNotes extends Activity
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
 
 
-        // try and retrieve a reference to our note fragment from the fragment manager
-        mNoteFragment = (NoteFragment) fm.findFragmentById(R.id.fragment_note);
+        // try and retrieve a reference to our note fragment from the fragment manager using its tag
+        mNoteFragment = (NoteFragment) fm.findFragmentByTag("fragment_note");
 
         if (mNoteFragment == null || mNoteFragment.isDetached()) {
 
@@ -70,9 +70,9 @@ public class BlocNotes extends Activity
             // instantiate one
             mNoteFragment = new NoteFragment();
 
-            // add it to the fragment manager
+            // add it to the fragment manager with a tag so we can retrieve it later
             fm.beginTransaction()
-                    .add(R.id.container, mNoteFragment)
+                    .add(R.id.container, mNoteFragment, "fragment_note")
                     .commit();
         }
 

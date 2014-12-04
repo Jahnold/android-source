@@ -48,29 +48,19 @@ public class NoteFragment extends Fragment {
         // create a reference to our editText to use elsewhere in the class
         mEditText = (EditText) rootView.findViewById(R.id.et_note);
 
-        // check whether our note text is saved in the bundle
-        if (savedInstanceState != null && savedInstanceState.containsKey(KEY_INDEX)) {
-
-            // it is so put it back in our EditText
-            mEditText.setText(savedInstanceState.getString(KEY_INDEX));
-        }
 
         // return the view
         return rootView;
     }
 
     /*
-        save the state of our editText into the bundle
-        so that it is not lost in between screen rotations, etc
+        save the fragment state
     */
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
 
         // run the super
         super.onSaveInstanceState(savedInstanceState);
-
-        // add the text of our editText to the saved state
-        savedInstanceState.putString(KEY_INDEX, mEditText.getText().toString());
 
     }
 
