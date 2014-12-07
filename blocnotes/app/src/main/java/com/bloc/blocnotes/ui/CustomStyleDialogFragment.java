@@ -87,10 +87,12 @@ public class CustomStyleDialogFragment extends DialogFragment {
         *   ~~~~~~~~~~~~~
         */
 
+        // get a reference to all three buttons
         Button btnSmall = (Button) view.findViewById(R.id.btn_small);
         Button btnMedium = (Button) view.findViewById(R.id.btn_medium);
         Button btnLarge = (Button) view.findViewById(R.id.btn_large);
 
+        // point them all at the same listener
         btnSmall.setOnClickListener(styleButtonListener);
         btnMedium.setOnClickListener(styleButtonListener);
         btnLarge.setOnClickListener(styleButtonListener);

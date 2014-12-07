@@ -185,5 +185,4 @@ public class BlocNotes extends Activity
 
     public void onThemeChange(CustomStyleDialogFragment dialog, int themeId) {}
 
-
 }
