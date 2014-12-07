@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 
 import com.bloc.blocnotes.BlocNotes;
@@ -83,45 +84,38 @@ public class CustomStyleDialogFragment extends DialogFragment {
         spinner.setSelection(mSpinnerPosition);
 
         /*
-        *   Style Buttons
-        *   ~~~~~~~~~~~~~
+        *   Style Radio Group
+        *   ~~~~~~~~~~~~~~~~~
         */
 
-        // get a reference to all three buttons
-        Button btnSmall = (Button) view.findViewById(R.id.btn_small);
-        Button btnMedium = (Button) view.findViewById(R.id.btn_medium);
-        Button btnLarge = (Button) view.findViewById(R.id.btn_large);
+        // get a reference to our radiogroup
+        RadioGroup textStyle = (RadioGroup) view.findViewById(R.id.rg_text_style);
 
-        // point them all at the same listener
-        btnSmall.setOnClickListener(styleButtonListener);
-        btnMedium.setOnClickListener(styleButtonListener);
-        btnLarge.setOnClickListener(styleButtonListener);
+        // set a listener
+        textStyle.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(RadioGroup textStyle, int checkedID ) {
+
+                switch (checkedID) {
+                    case R.id.rb_style_small:
+                        ((BlocNotes) getActivity()).onStyleChange(null,0);
+                        break;
+                    case R.id.rb_style_medium:
+                        ((BlocNotes) getActivity()).onStyleChange(null,1);
+                        break;
+                    case R.id.rb_style_large:
+                        ((BlocNotes) getActivity()).onStyleChange(null,2);
+                        break;
+                }
+
+            }
+
+        });
 
         // Inflate the layout for this fragment
         return view;
 
     }
-
-    /* Listener for the Style Buttons
-    *
-    */
-    private View.OnClickListener styleButtonListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            switch (v.getId()) {
-                case R.id.btn_small:
-                    ((BlocNotes) getActivity()).onStyleChange(null,0);
-                    break;
-
-                case R.id.btn_medium:
-                    ((BlocNotes) getActivity()).onStyleChange(null,1);
-                    break;
-
-                case R.id.btn_large:
-                    ((BlocNotes) getActivity()).onStyleChange(null,2);
-                    break;
-            }
-        }
-    };
 
 }
