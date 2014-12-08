@@ -18,6 +18,9 @@ import android.widget.Spinner;
 import com.bloc.blocnotes.BlocNotes;
 import com.bloc.blocnotes.R;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 public class CustomStyleDialogFragment extends DialogFragment {
 
@@ -99,13 +102,13 @@ public class CustomStyleDialogFragment extends DialogFragment {
 
                 switch (checkedID) {
                     case R.id.rb_style_small:
-                        ((BlocNotes) getActivity()).onStyleChange(null,0);
+                        ((BlocNotes) getActivity()).onStyleChange(null,"0");
                         break;
                     case R.id.rb_style_medium:
-                        ((BlocNotes) getActivity()).onStyleChange(null,1);
+                        ((BlocNotes) getActivity()).onStyleChange(null,"1");
                         break;
                     case R.id.rb_style_large:
-                        ((BlocNotes) getActivity()).onStyleChange(null,2);
+                        ((BlocNotes) getActivity()).onStyleChange(null,"2");
                         break;
                 }
 

@@ -1,6 +1,8 @@
 package com.bloc.blocnotes.ui;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,14 +18,18 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bloc.blocnotes.BlocNotes;
 import com.bloc.blocnotes.R;
 
 
 public class NoteFragment extends Fragment {
 
     private static final String KEY_INDEX  = "noteText";
-    protected EditText mEditText;
-    private static boolean mIsMenuInflated = false;
+    public EditText mEditText;
+
+    private Typeface mHelvetica;
+    private Typeface mHelveticaNeue;
+    private Typeface mImpact;
 
     public NoteFragment() {
 
@@ -40,17 +46,34 @@ public class NoteFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
 
         // create a reference to our fragment view
-        View rootView = inflater.inflate(R.layout.fragment_note, container, false);
+        View v = inflater.inflate(R.layout.fragment_note, container, false);
 
         // create a reference to our editText to use elsewhere in the class
-        mEditText = (EditText) rootView.findViewById(R.id.et_note);
+        mEditText = (EditText) v.findViewById(R.id.et_note);
 
+
+        // load shared prefs
+        //((BlocNotes) getActivity()).loadPrefs();
+
+        mHelvetica = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Helvetica_Reg.ttf");
+        mHelveticaNeue = Typeface.createFromAsset(getActivity().getAssets(), "fonts/HelveticaNeue_Lt.ttf");
+        mImpact = Typeface.createFromAsset(getActivity().getAssets(), "fonts/impact.ttf");
 
         // return the view
-        return rootView;
+        return v;
+    }
+
+
+    @Override
+    public void onResume() {
+
+        super.onResume();
+
+        ((BlocNotes) getActivity()).loadPrefs();
+
     }
 
     /*
@@ -103,28 +126,33 @@ public class NoteFragment extends Fragment {
 
     }
 
-    /* Change the font of mEditText to whichever font is passed in
+    /*  Change the font of the EditText to whichever font is passed in
     *
+    *   @param font the name of the chosen font
     */
-    public void setFont(String fontPath) {
+    public void setFont(String font) {
 
-        Typeface font;
+        EditText editText = (EditText) getView().findViewById(R.id.et_note);
 
-        // check for default, otherwise load font from file
-        if (fontPath.equals("Default")) {
-            font = Typeface.DEFAULT;
+
+        if (font.equals("Helvetica")) {
+            editText.setTypeface(mHelvetica);
+        }
+        else if (font.equals("Helvetica-Neue")) {
+            editText.setTypeface(mHelveticaNeue);
+        }
+        else if (font.equals("Impact")) {
+            editText.setTypeface(mImpact);
         }
         else {
-            font = Typeface.createFromAsset(getActivity().getAssets(), fontPath);
+            editText.setTypeface(Typeface.DEFAULT);
         }
-
-        mEditText.setTypeface(font);
 
     }
 
-    public void setTextAppearance(int size) {
+    public void setTextAppearance(String size) {
 
-        switch (size) {
+        switch (Integer.parseInt(size)) {
             case 0:
                 mEditText.setTextAppearance(getActivity(), android.R.style.TextAppearance_Small);
                 break;
@@ -136,5 +164,6 @@ public class NoteFragment extends Fragment {
                 break;
         }
     }
+
 
 }

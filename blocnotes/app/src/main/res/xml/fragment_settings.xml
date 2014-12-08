@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent" >
+
+    <ListPreference
+        android:key="@string/PREF_FONT_NAME"
+        android:title="@string/pref_fontName"
+        android:entries="@array/pref_fontName_entries"
+        android:entryValues="@array/pref_fontName_entries" />
+
+    <ListPreference
+        android:key="@string/PREF_FONT_SIZE"
+        android:title="@string/pref_fontSize"
+        android:entries="@array/pref_fontSize_entries"
+        android:entryValues="@array/pref_fontSize_values" />
+
+</PreferenceScreen>

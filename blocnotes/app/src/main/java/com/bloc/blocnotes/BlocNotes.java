@@ -6,9 +6,11 @@ import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Gravity;
@@ -23,6 +25,7 @@ import android.widget.TextView;
 
 import com.bloc.blocnotes.ui.CustomStyleDialogFragment;
 import com.bloc.blocnotes.ui.NoteFragment;
+import com.bloc.blocnotes.ui.SettingsFragment;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,12 +35,9 @@ public class BlocNotes extends Activity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
     private static final String TAG = "BlocNotesActivity";
-    /**
-     * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
-     */
-    private NavigationDrawerFragment mNavigationDrawerFragment;
-    private NoteFragment mNoteFragment;
 
+    private NavigationDrawerFragment mNavigationDrawerFragment;         // navigation draw
+    private NoteFragment mNoteFragment;                                 // main note fragment
 
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
@@ -48,7 +48,6 @@ public class BlocNotes extends Activity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bloc_notes);
-
 
         // get a reference to the fragment manager
         FragmentManager fm = getFragmentManager();
@@ -75,7 +74,6 @@ public class BlocNotes extends Activity
                     .add(R.id.container, mNoteFragment, "fragment_note")
                     .commit();
         }
-
 
     }
 
@@ -120,7 +118,7 @@ public class BlocNotes extends Activity
 
             getMenuInflater().inflate(R.menu.bloc_notes, menu);
 
-            //restoreActionBar();
+            restoreActionBar();
 
             return true;
         }
@@ -138,7 +136,12 @@ public class BlocNotes extends Activity
 
             case R.id.action_settings:
 
-                // does nothing, just return true
+                // load the settings fragment
+                getFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.container, new SettingsFragment())
+                        .addToBackStack(null)
+                        .commit();
                 return true;
 
             case R.id.action_style_dialog:
@@ -158,9 +161,14 @@ public class BlocNotes extends Activity
     /* Change the font size of the editview
     *
     */
-    public void onStyleChange(CustomStyleDialogFragment dialog, int styeId) {
+    public void onStyleChange(CustomStyleDialogFragment dialog, String styeId) {
 
+        // update the editText
         mNoteFragment.setTextAppearance(styeId);
+
+        // update the shared prefs
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        prefs.edit().putString(getString(R.string.PREF_FONT_SIZE),styeId).commit();
 
     }
 
@@ -168,21 +176,35 @@ public class BlocNotes extends Activity
     /* Change the font of the editview
     *
     */
-    public void onFontChange(CustomStyleDialogFragment dialog, String fontName) {
-
-        // create a map of font names to paths
-        Map<String, String> fontPaths = new HashMap<String, String>();
-        fontPaths.put("Helvetica", "fonts/Helvetica_Reg.ttf");
-        fontPaths.put("Helvetica-Neue", "fonts/HelveticaNeue_Lt.ttf");
-        fontPaths.put("Impact", "fonts/impact.ttf");
-        fontPaths.put("Default", "Default");
+    public void onFontChange(CustomStyleDialogFragment dialog, String fontPath) {
 
 
         // call the set font method of the fragment
-        mNoteFragment.setFont(fontPaths.get(fontName));
+        mNoteFragment.setFont(fontPath);
+
+        // update the shared prefs
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        prefs.edit().putString(getString(R.string.PREF_FONT_NAME), fontPath).commit();
 
     }
 
     public void onThemeChange(CustomStyleDialogFragment dialog, int themeId) {}
+
+    /* Load and set any shared preferences for font & size
+    *
+    */
+    public void loadPrefs() {
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        String fontName = prefs.getString(getString(R.string.PREF_FONT_NAME),"Default");
+        String fontSize = prefs.getString(getString(R.string.PREF_FONT_SIZE),"1");
+
+        Log.d(TAG,"fontName: " + fontName);
+
+        mNoteFragment.setFont(fontName);
+        mNoteFragment.setTextAppearance(fontSize);
+
+    }
 
 }

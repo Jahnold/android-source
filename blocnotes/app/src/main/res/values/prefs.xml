@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="PREF_FONT_NAME" translateable="false">com.bloc.blocnotes.PREFS_KEY.FONT_NAME</string>
+    <string name="PREF_FONT_SIZE" translateable="false" >com.bloc.blocnotes.PREFS_KEY.FONT_SIZE</string>
+
+</resources>

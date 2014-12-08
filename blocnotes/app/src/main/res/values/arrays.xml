@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="pref_fontName_entries">
+        <item>Default</item>
+        <item>Helvetica</item>
+        <item>Helvetica-Neue</item>
+        <item>Impact</item>
+    </string-array>
+
+    <string-array name="pref_fontName_values">
+        <item>Default</item>
+        <item>Helvetica_Reg.ttf</item>
+        <item>HelveticaNeue_Lt.ttf</item>
+        <item>impact.ttf</item>
+    </string-array>
+
+
+    <string-array name="pref_fontSize_entries">
+        <item>Small</item>
+        <item>Medium</item>
+        <item>Large</item>
+    </string-array>
+
+    <string-array name="pref_fontSize_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
+</resources>
