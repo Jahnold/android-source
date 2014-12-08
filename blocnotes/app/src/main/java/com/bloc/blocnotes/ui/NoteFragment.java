@@ -7,6 +7,7 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -54,9 +55,6 @@ public class NoteFragment extends Fragment {
         // create a reference to our editText to use elsewhere in the class
         mEditText = (EditText) v.findViewById(R.id.et_note);
 
-
-        // load shared prefs
-        //((BlocNotes) getActivity()).loadPrefs();
 
         mHelvetica = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Helvetica_Reg.ttf");
         mHelveticaNeue = Typeface.createFromAsset(getActivity().getAssets(), "fonts/HelveticaNeue_Lt.ttf");
@@ -132,20 +130,20 @@ public class NoteFragment extends Fragment {
     */
     public void setFont(String font) {
 
-        EditText editText = (EditText) getView().findViewById(R.id.et_note);
-
+        //EditText editText = (EditText) getView().findViewById(R.id.et_note);
+        //EditText editText = (EditText) getActivity().findViewById(R.id.et_note);
 
         if (font.equals("Helvetica")) {
-            editText.setTypeface(mHelvetica);
+            mEditText.setTypeface(mHelvetica);
         }
         else if (font.equals("Helvetica-Neue")) {
-            editText.setTypeface(mHelveticaNeue);
+            mEditText.setTypeface(mHelveticaNeue);
         }
         else if (font.equals("Impact")) {
-            editText.setTypeface(mImpact);
+            mEditText.setTypeface(mImpact);
         }
         else {
-            editText.setTypeface(Typeface.DEFAULT);
+            mEditText.setTypeface(Typeface.DEFAULT);
         }
 
     }

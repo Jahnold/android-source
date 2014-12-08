@@ -200,10 +200,10 @@ public class BlocNotes extends Activity
         String fontName = prefs.getString(getString(R.string.PREF_FONT_NAME),"Default");
         String fontSize = prefs.getString(getString(R.string.PREF_FONT_SIZE),"1");
 
-        Log.d(TAG,"fontName: " + fontName);
-
-        mNoteFragment.setFont(fontName);
+        // set font size BEFORE typeface otherwise it reverts to default font face
         mNoteFragment.setTextAppearance(fontSize);
+        mNoteFragment.setFont(fontName);
+
 
     }
 
