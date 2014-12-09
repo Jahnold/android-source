@@ -61,6 +61,8 @@ public class NavigationDrawerFragment extends Fragment {
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
 
+    private SimpleCursorAdapter mCursorAdapter;
+
     public NavigationDrawerFragment() {
     }
 
@@ -99,7 +101,7 @@ public class NavigationDrawerFragment extends Fragment {
         Cursor cursor = db.query("Notebooks",new String[] {"_id", "name"},null,null,null,null,null);
 
         // create a cursor adapter to sit between the db data and the list view
-        SimpleCursorAdapter cursorAdapter = new SimpleCursorAdapter(
+        mCursorAdapter = new SimpleCursorAdapter(
                 getActivity(),
                 android.R.layout.simple_list_item_activated_1,
                 cursor,
@@ -113,7 +115,8 @@ public class NavigationDrawerFragment extends Fragment {
         mDrawerListView = (ListView) inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
 
         // set the adapter on the listview
-        mDrawerListView.setAdapter(cursorAdapter);
+        mDrawerListView.setAdapter(mCursorAdapter);
+
 
         // set the listener
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -302,5 +305,22 @@ public class NavigationDrawerFragment extends Fragment {
          * Called when an item in the navigation drawer is selected.
          */
         void onNavigationDrawerItemSelected(int position);
+    }
+
+    /**
+     *  Called when a new notebook has been added to the database
+     *  Creates a new cursor and updates the list view with the new contents
+     */
+    public void onDatabaseUpdated() {
+
+        // open the db
+        SQLiteDatabase db = BlocNotesApplication.get(getActivity()).getDB().getReadableDatabase();
+
+        // create a cursor (recordset) for the data we want
+        Cursor cursor = db.query("Notebooks",new String[] {"_id", "name"},null,null,null,null,null);
+
+        mCursorAdapter.changeCursor(cursor);
+        mCursorAdapter.notifyDataSetChanged();
+
     }
 }

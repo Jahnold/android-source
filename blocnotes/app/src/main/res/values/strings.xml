@@ -21,4 +21,8 @@
 
     <string name="pref_fontName">Font Name</string>
     <string name="pref_fontSize">Font Size</string>
+
+    <string name="new_notebook_dialog_title">New Notebook</string>
+    <string name="new_notebook_label">Notebook Name</string>
+    <string name="new_notebook_btn_confirm">Create Notebook</string>
 </resources>

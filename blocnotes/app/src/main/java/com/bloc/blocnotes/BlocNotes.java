@@ -5,8 +5,10 @@ import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
@@ -24,6 +26,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.bloc.blocnotes.ui.CustomStyleDialogFragment;
+import com.bloc.blocnotes.ui.NewNotebookFragment;
 import com.bloc.blocnotes.ui.NoteFragment;
 import com.bloc.blocnotes.ui.SettingsFragment;
 
@@ -151,6 +154,13 @@ public class BlocNotes extends Activity
                 dialog.show(getFragmentManager(),null);
                 return true;
 
+            case R.id.action_add_notebook:
+
+                // display the new notebook dialog fragment
+                NewNotebookFragment newNotebookDialog = new NewNotebookFragment();
+                newNotebookDialog.show(getFragmentManager(),null);
+                return true;
+
             default:
 
                 return super.onOptionsItemSelected(item);
@@ -189,6 +199,23 @@ public class BlocNotes extends Activity
     }
 
     public void onThemeChange(CustomStyleDialogFragment dialog, int themeId) {}
+
+
+    public void onFinishNewNotebookDialog(String newNotebookName) {
+
+        // open a db connection
+        SQLiteDatabase db = BlocNotesApplication.get(this).getDB().getWritableDatabase();
+
+        // add the new notebook to the db
+        ContentValues values = new ContentValues();
+        values.put("name", newNotebookName);
+        db.insert("Notebooks",null,values);
+        db.close();
+
+        // refresh the navdraw list adapter
+        mNavigationDrawerFragment.onDatabaseUpdated();
+
+    }
 
     /* Load and set any shared preferences for font & size
     *
