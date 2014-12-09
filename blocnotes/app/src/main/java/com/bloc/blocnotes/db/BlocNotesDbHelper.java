@@ -42,7 +42,7 @@ public class BlocNotesDbHelper extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
         values.put("name", "Uncategorized");
-        long rowId = sqLiteDatabase.insert("NoteBook", null, values);
+        sqLiteDatabase.insert("Notebooks", null, values);
 
     }
 
