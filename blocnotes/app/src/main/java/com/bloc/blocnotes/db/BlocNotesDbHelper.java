@@ -40,9 +40,27 @@ public class BlocNotesDbHelper extends SQLiteOpenHelper {
             sqLiteDatabase.execSQL(tables.next().getCreateStatement());
         }
 
+        // create an sample notebook 'uncategorized'
         ContentValues values = new ContentValues();
         values.put("name", "Uncategorized");
-        sqLiteDatabase.insert("Notebooks", null, values);
+        long uncatId = sqLiteDatabase.insert("Notebooks", null, values);
+
+        // for testing add some notes to the uncat notebook
+        values.clear();
+        values.put("text", "This is a sample note");
+        values.put("notebook_id", uncatId);
+        sqLiteDatabase.insert("Notes", null, values);
+
+        values.clear();
+        values.put("text", "This is not a sample note (j/k it is)");
+        values.put("notebook_id", uncatId);
+        sqLiteDatabase.insert("Notes", null, values);
+
+        values.clear();
+        values.put("text", "Please note...this is a sample note.");
+        values.put("notebook_id", uncatId);
+        sqLiteDatabase.insert("Notes", null, values);
+
 
     }
 

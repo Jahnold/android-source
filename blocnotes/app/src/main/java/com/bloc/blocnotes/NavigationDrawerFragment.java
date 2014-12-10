@@ -216,12 +216,18 @@ public class NavigationDrawerFragment extends Fragment {
         mCurrentSelectedPosition = position;
 
 
-        // if a user has clicked on the new notepad action then show a toast
-        if (position == 1) {
-            Toast.makeText(getActivity(), "Coming Soon!", Toast.LENGTH_SHORT).show();
-        }
-
         if (mDrawerListView != null) {
+
+            // get a cursor ref for the notebook which was selected
+            Cursor notebook = (Cursor) mDrawerListView.getItemAtPosition(position);
+
+            // then get the notebook id and name from the cursor
+            int notebookId =  notebook.getInt(notebook.getColumnIndex("_id"));
+            String notebookName = notebook.getString(notebook.getColumnIndex("name"));
+
+            // have the activity display a notebook fragment for the selected id
+            ((BlocNotes) getActivity()).onNotebookSelected(notebookId,notebookName);
+
             mDrawerListView.setItemChecked(position, true);
         }
         if (mDrawerLayout != null) {

@@ -28,6 +28,7 @@ import android.widget.TextView;
 import com.bloc.blocnotes.ui.CustomStyleDialogFragment;
 import com.bloc.blocnotes.ui.NewNotebookFragment;
 import com.bloc.blocnotes.ui.NoteFragment;
+import com.bloc.blocnotes.ui.NotebookFragment;
 import com.bloc.blocnotes.ui.SettingsFragment;
 
 import java.util.HashMap;
@@ -41,6 +42,7 @@ public class BlocNotes extends Activity
 
     private NavigationDrawerFragment mNavigationDrawerFragment;         // navigation draw
     private NoteFragment mNoteFragment;                                 // main note fragment
+    private NotebookFragment mNotebookFragment;
 
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
@@ -89,19 +91,19 @@ public class BlocNotes extends Activity
 
     }
 
-    public void onSectionAttached(int number) {
-        switch (number) {
-            case 1:
-                mTitle = getString(R.string.action_add_notebook);
-                break;
-            case 2:
-                mTitle = getString(R.string.title_section2);
-                break;
-            case 3:
-                mTitle = getString(R.string.title_section3);
-                break;
-        }
-    }
+//    public void onSectionAttached(int number) {
+//        switch (number) {
+//            case 1:
+//                mTitle = getString(R.string.action_add_notebook);
+//                break;
+//            case 2:
+//                mTitle = getString(R.string.title_section2);
+//                break;
+//            case 3:
+//                mTitle = getString(R.string.title_section3);
+//                break;
+//        }
+//    }
 
     public void restoreActionBar() {
         ActionBar actionBar = getActionBar();
@@ -214,6 +216,23 @@ public class BlocNotes extends Activity
 
         // refresh the navdraw list adapter
         mNavigationDrawerFragment.onDatabaseUpdated();
+
+    }
+
+    public void onNotebookSelected(int notebookId, String notebookName) {
+
+        // create new notebook fragment
+        mNotebookFragment = new NotebookFragment();
+
+        // pass in the id and name to the setup method
+        mNotebookFragment.setUp(notebookId, notebookName);
+
+        // have the fragment manager display the fragment
+        getFragmentManager()
+                .beginTransaction()
+                .replace(R.id.container, mNotebookFragment)
+                .addToBackStack(null)
+                .commit();
 
     }
 

@@ -18,7 +18,7 @@ public class NotesTable extends Table {
 
         String q = "CREATE TABLE Notes ( " +
                 "    _id INTEGER PRIMARY KEY, " +
-                "    text TEXT " +
+                "    text TEXT, " +
                 "    notebook_id INTEGER " +
                 ")";
         return q;
