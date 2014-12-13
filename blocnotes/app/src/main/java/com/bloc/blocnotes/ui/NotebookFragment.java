@@ -14,6 +14,11 @@ import android.widget.SimpleCursorAdapter;
 
 import com.bloc.blocnotes.BlocNotesApplication;
 import com.bloc.blocnotes.R;
+import com.bloc.blocnotes.models.Note;
+import com.bloc.blocnotes.models.NoteCentre;
+import com.bloc.blocnotes.models.Notebook;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -21,8 +26,7 @@ import com.bloc.blocnotes.R;
 public class NotebookFragment extends Fragment {
 
 
-    private int mNotebookId;                            // the id of the notebook we're showing
-    private String mNotebookName;                       // the name of the notebook we're showing
+    private Notebook mNotebook;                         // the notebook we're expanding
 
     public NotebookFragment() {
         // Required empty public constructor
@@ -35,23 +39,23 @@ public class NotebookFragment extends Fragment {
         // Inflate the layout for this fragment
         ListView v = (ListView) inflater.inflate(R.layout.fragment_notebook, container, false);
 
-        // open the db
-        SQLiteDatabase db = BlocNotesApplication.get(getActivity()).getDB().getReadableDatabase();
+        // get an array list of the notes in this notebook
+        NoteCentre nc = new NoteCentre();
+        ArrayList<Note> notesList = nc.getNotesForNotebook(mNotebook.getId());
 
-        // create a cursor (record set) for the data we want
-        Cursor cursor = db.query("Notes",new String[] {"_id", "text"},"notebook_id = ?", new String[] {Integer.toString(mNotebookId)} ,null,null,null);
-
-        // use our custom notebook adapter to map the cursor to list view items
-        NotebookAdapter notebookAdapter = new NotebookAdapter(getActivity(),cursor);
+        // use our custom note array adapter
+        NoteArrayAdapter noteArrayAdapter = new NoteArrayAdapter(
+                getActivity(),
+                android.R.layout.simple_list_item_activated_1,
+                notesList
+        );
 
         // set our adapter to our list view
-        v.setAdapter(notebookAdapter);
-
-        db.close();
+        v.setAdapter(noteArrayAdapter);
 
         // set the title of our app to the name of the notebook
         ActionBar actionBar = getActivity().getActionBar();
-        actionBar.setTitle(mNotebookName);
+        actionBar.setTitle(mNotebook.getName());
 
         return v;
     }
@@ -60,10 +64,9 @@ public class NotebookFragment extends Fragment {
      *      Passes in notebook name and id
      *
      */
-    public void setUp(int notebookId, String notebookName) {
+    public void setUp(Notebook notebook) {
 
-        mNotebookId = notebookId;
-        mNotebookName = notebookName;
+        mNotebook = notebook;
 
     }
 

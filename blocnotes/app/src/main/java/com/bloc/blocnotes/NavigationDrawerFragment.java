@@ -13,6 +13,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,6 +25,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
+
+import com.bloc.blocnotes.models.Notebook;
+import com.bloc.blocnotes.models.NotebookCentre;
+import com.bloc.blocnotes.ui.NotebookArrayAdapter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -61,7 +69,8 @@ public class NavigationDrawerFragment extends Fragment {
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
 
-    private SimpleCursorAdapter mCursorAdapter;
+    private ArrayList<Notebook> mNotebookList;
+    private NotebookArrayAdapter mNotebookAdapter;
 
     public NavigationDrawerFragment() {
     }
@@ -94,28 +103,22 @@ public class NavigationDrawerFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
 
-        // open the db
-        SQLiteDatabase db = BlocNotesApplication.get(getActivity()).getDB().getReadableDatabase();
+        // get an array list of all the current notebooks
+        NotebookCentre nbc = new NotebookCentre();
+        mNotebookList = nbc.getAllNotebooks();
 
-        // create a cursor (recordset) for the data we want
-        Cursor cursor = db.query("Notebooks",new String[] {"_id", "name"},null,null,null,null,null);
-
-        // create a cursor adapter to sit between the db data and the list view
-        mCursorAdapter = new SimpleCursorAdapter(
+        // create a notebook adapter
+        mNotebookAdapter = new NotebookArrayAdapter(
                 getActivity(),
                 android.R.layout.simple_list_item_activated_1,
-                cursor,
-                new String[] {"name"},
-                new int[] {android.R.id.text1},
-                0
+                mNotebookList
         );
-
 
         // inflate the list view
         mDrawerListView = (ListView) inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
 
-        // set the adapter on the listview
-        mDrawerListView.setAdapter(mCursorAdapter);
+        // set the adapter on the list view
+        mDrawerListView.setAdapter(mNotebookAdapter);
 
 
         // set the listener
@@ -127,9 +130,6 @@ public class NavigationDrawerFragment extends Fragment {
         });
 
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
-
-        // close the database
-        db.close();
 
         return mDrawerListView;
     }
@@ -218,15 +218,11 @@ public class NavigationDrawerFragment extends Fragment {
 
         if (mDrawerListView != null) {
 
-            // get a cursor ref for the notebook which was selected
-            Cursor notebook = (Cursor) mDrawerListView.getItemAtPosition(position);
-
-            // then get the notebook id and name from the cursor
-            int notebookId =  notebook.getInt(notebook.getColumnIndex("_id"));
-            String notebookName = notebook.getString(notebook.getColumnIndex("name"));
+            // get the notebook object that was selected
+            Notebook notebook = (Notebook) mDrawerListView.getItemAtPosition(position);
 
             // have the activity display a notebook fragment for the selected id
-            ((BlocNotes) getActivity()).onNotebookSelected(notebookId,notebookName);
+            ((BlocNotes) getActivity()).onNotebookSelected(notebook);
 
             mDrawerListView.setItemChecked(position, true);
         }
@@ -315,18 +311,11 @@ public class NavigationDrawerFragment extends Fragment {
 
     /**
      *  Called when a new notebook has been added to the database
-     *  Creates a new cursor and updates the list view with the new contents
+     *  Add the new notebook to the list
      */
-    public void onDatabaseUpdated() {
+    public void onDatabaseUpdated(Notebook notebook) {
 
-        // open the db
-        SQLiteDatabase db = BlocNotesApplication.get(getActivity()).getDB().getReadableDatabase();
-
-        // create a cursor (recordset) for the data we want
-        Cursor cursor = db.query("Notebooks",new String[] {"_id", "name"},null,null,null,null,null);
-
-        mCursorAdapter.changeCursor(cursor);
-        mCursorAdapter.notifyDataSetChanged();
+        mNotebookAdapter.add(notebook);
 
     }
 }

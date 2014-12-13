@@ -23,11 +23,16 @@ public class BlocNotesApplication extends Application {
 
     }
 
-    // getter for the database helper
-    public BlocNotesDbHelper getDB() {
+    public static  BlocNotesDbHelper getDB() {
 
         return mDB;
     }
+
+    // getter for the database helper
+//    public BlocNotesDbHelper getDB() {
+//
+//        return mDB;
+//    }
 
     // getter for the context
     public static BlocNotesApplication get(Context context) {
