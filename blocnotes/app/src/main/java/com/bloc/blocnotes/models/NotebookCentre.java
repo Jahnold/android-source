@@ -62,7 +62,7 @@ public class NotebookCentre extends ModelCentre<Notebook> {
         }
 
         cursor.close();
-        db.close();
+        //db.close();
 
         return notebookList;
 

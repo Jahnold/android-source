@@ -103,23 +103,44 @@ public class NavigationDrawerFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
 
-        // get an array list of all the current notebooks
-        NotebookCentre nbc = new NotebookCentre();
-        mNotebookList = nbc.getAllNotebooks();
-
-        // create a notebook adapter
-        mNotebookAdapter = new NotebookArrayAdapter(
-                getActivity(),
-                android.R.layout.simple_list_item_activated_1,
-                mNotebookList
-        );
-
         // inflate the list view
         mDrawerListView = (ListView) inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
 
-        // set the adapter on the list view
-        mDrawerListView.setAdapter(mNotebookAdapter);
+        // because we're going to query the db start a new thread to do so
+        // then use the result to create an adapter but do that on the ui thread
+        new Thread() {
 
+            @Override
+            public void run() {
+
+                super.run();
+
+                // get an array list of all the current notebooks
+                NotebookCentre nbc = new NotebookCentre();
+                mNotebookList = nbc.getAllNotebooks();
+
+
+                getActivity().runOnUiThread(new Runnable() {
+
+                    @Override
+                     public void run() {
+
+                        // create a notebook adapter
+                        mNotebookAdapter = new NotebookArrayAdapter(
+                                getActivity(),
+                                //android.R.layout.simple_list_item_activated_1,
+                                0,
+                                mNotebookList
+                        );
+
+                        // set the adapter on the list view
+                        mDrawerListView.setAdapter(mNotebookAdapter);
+
+                     }
+                });
+            }
+
+        }.start();
 
         // set the listener
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

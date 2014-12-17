@@ -27,31 +27,52 @@ public class NotebookFragment extends Fragment {
 
 
     private Notebook mNotebook;                         // the notebook we're expanding
+    private ArrayList<Note> mNotesList;
 
     public NotebookFragment() {
         // Required empty public constructor
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
 
         // Inflate the layout for this fragment
-        ListView v = (ListView) inflater.inflate(R.layout.fragment_notebook, container, false);
+        final ListView v = (ListView) inflater.inflate(R.layout.fragment_notebook, container, false);
 
-        // get an array list of the notes in this notebook
-        NoteCentre nc = new NoteCentre();
-        ArrayList<Note> notesList = nc.getNotesForNotebook(mNotebook.getId());
 
-        // use our custom note array adapter
-        NoteArrayAdapter noteArrayAdapter = new NoteArrayAdapter(
-                getActivity(),
-                android.R.layout.simple_list_item_activated_1,
-                notesList
-        );
+        // because we're going to query the db start a new thread to do so
+        // then use the result to create an adapter but do that on the ui thread
+        new Thread() {
 
-        // set our adapter to our list view
-        v.setAdapter(noteArrayAdapter);
+            @Override
+            public void run() {
+
+                super.run();
+
+                // get an array list of the notes in this notebook
+                NoteCentre nc = new NoteCentre();
+                mNotesList = nc.getNotesForNotebook(mNotebook.getId());
+
+                getActivity().runOnUiThread(new Runnable() {
+
+                    @Override
+                    public void run() {
+
+                        // use our custom note array adapter
+                        NoteArrayAdapter noteArrayAdapter = new NoteArrayAdapter(
+                                getActivity(),
+                                android.R.layout.simple_list_item_activated_1,
+                                mNotesList
+                        );
+
+                        // set our adapter to our list view
+                        v.setAdapter(noteArrayAdapter);
+
+                    }
+                });
+            }
+
+        }.start();
 
         // set the title of our app to the name of the notebook
         ActionBar actionBar = getActivity().getActionBar();

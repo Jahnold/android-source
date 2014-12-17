@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -190,16 +191,30 @@ public class BlocNotes extends Activity
     public void onThemeChange(CustomStyleDialogFragment dialog, int themeId) {}
 
 
-    public void onFinishNewNotebookDialog(String newNotebookName) {
+    public void onFinishNewNotebookDialog(final String newNotebookName) {
 
-        // create a new notebook
-        Notebook notebook = new Notebook(0);
-        notebook.setName(newNotebookName);
-        notebook.setNoteCount(0);
-        notebook.save();
+        new AsyncTask<Void,Void,Notebook>() {
 
-        // refresh the navdraw list adapter
-        mNavigationDrawerFragment.onDatabaseUpdated(notebook);
+            protected Notebook doInBackground(Void... voids) {
+
+                // create a new notebook
+                Notebook notebook = new Notebook(0);
+                notebook.setName(newNotebookName);
+                notebook.setNoteCount(0);
+                notebook.save();
+
+                return notebook;
+
+            }
+
+            protected void onPostExecute(Notebook notebook) {
+
+                // refresh the navdraw list adapter
+                mNavigationDrawerFragment.onDatabaseUpdated(notebook);
+
+            }
+
+        }.execute();
 
     }
 
