@@ -2,17 +2,14 @@ package com.bloc.blocnotes.ui;
 
 
 import android.app.ActionBar;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
 
-import com.bloc.blocnotes.BlocNotesApplication;
 import com.bloc.blocnotes.R;
 import com.bloc.blocnotes.models.Note;
 import com.bloc.blocnotes.models.NoteCentre;
@@ -34,11 +31,14 @@ public class NotebookFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle bundle) {
 
         // Inflate the layout for this fragment
-        final ListView v = (ListView) inflater.inflate(R.layout.fragment_notebook, container, false);
+        LinearLayout v = (LinearLayout) inflater.inflate(R.layout.fragment_notebook, container, false);
 
+        // get refs to the list view and empty view
+        final ListView notesListView = (ListView) v.findViewById(R.id.list_notes);
+        final LinearLayout emptyNotesListView = (LinearLayout) v.findViewById(R.id.empty_notebook);
 
         // because we're going to query the db start a new thread to do so
         // then use the result to create an adapter but do that on the ui thread
@@ -53,6 +53,7 @@ public class NotebookFragment extends Fragment {
                 NoteCentre nc = new NoteCentre();
                 mNotesList = nc.getNotesForNotebook(mNotebook.getId());
 
+
                 getActivity().runOnUiThread(new Runnable() {
 
                     @Override
@@ -65,8 +66,11 @@ public class NotebookFragment extends Fragment {
                                 mNotesList
                         );
 
+                        // set the empty view
+                        notesListView.setEmptyView(emptyNotesListView);
+
                         // set our adapter to our list view
-                        v.setAdapter(noteArrayAdapter);
+                        notesListView.setAdapter(noteArrayAdapter);
 
                     }
                 });

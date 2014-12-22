@@ -1,11 +1,42 @@
-<ListView xmlns:android="http://schemas.android.com/apk/res/android"
-
-    android:id="@+id/list_notebooks"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:choiceMode="singleChoice"
-    android:divider="@android:color/holo_blue_dark"
-    android:dividerHeight="1dp"
-    android:background="#cccc"
+    android:orientation="vertical">
 
+    <ListView
+
+        android:id="@+id/list_notes"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:choiceMode="singleChoice"
+        android:divider="@android:color/holo_blue_dark"
+        android:dividerHeight="1dp"
+        android:background="#cccc"
     />
+
+    <!-- empty view -->
+    <LinearLayout
+
+        android:id="@+id/empty_notebook"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/empty_notebook_text"
+        android:gravity="center_vertical" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/new_note_btn"
+        />
+
+    </LinearLayout>
+</LinearLayout>

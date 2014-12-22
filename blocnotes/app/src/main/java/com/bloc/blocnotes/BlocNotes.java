@@ -195,7 +195,7 @@ public class BlocNotes extends Activity
 
         new AsyncTask<Void,Void,Notebook>() {
 
-            protected Notebook doInBackground(Void... voids) {
+            protected Notebook doInBackground(Void... args) {
 
                 // create a new notebook
                 Notebook notebook = new Notebook(0);
