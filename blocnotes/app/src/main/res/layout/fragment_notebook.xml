@@ -5,7 +5,6 @@
     android:orientation="vertical">
 
     <ListView
-
         android:id="@+id/list_notes"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -17,7 +16,6 @@
 
     <!-- empty view -->
     <LinearLayout
-
         android:id="@+id/empty_notebook"
         android:orientation="vertical"
         android:gravity="center"

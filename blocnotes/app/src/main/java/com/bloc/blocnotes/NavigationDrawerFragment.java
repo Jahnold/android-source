@@ -23,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
@@ -123,7 +124,7 @@ public class NavigationDrawerFragment extends Fragment {
                 getActivity().runOnUiThread(new Runnable() {
 
                     @Override
-                     public void run() {
+                    public void run() {
 
                         // create a notebook adapter
                         mNotebookAdapter = new NotebookArrayAdapter(
@@ -136,17 +137,60 @@ public class NavigationDrawerFragment extends Fragment {
                         // set the adapter on the list view
                         mDrawerListView.setAdapter(mNotebookAdapter);
 
-                     }
+                    }
                 });
             }
 
         }.start();
 
-        // set the listener
+        // set the click listener
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 selectItem(position);
+            }
+        });
+
+        // create a long click listener
+        mDrawerListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            //@Override
+            public boolean onItemLongClick(final AdapterView<?> parent, View view, final int position, long id) {
+
+                // create a popup menu
+                PopupMenu popupMenu = new PopupMenu(getActivity(), view);
+                popupMenu.getMenu().add(Menu.NONE, 0, Menu.NONE, "Rename");
+                popupMenu.getMenu().add(Menu.NONE, 1, Menu.NONE, "Delete");
+
+                // setup the listener for popup menu clicks
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem menuItem) {
+
+                        // get the notebook
+                        Notebook notebook = (Notebook) parent.getItemAtPosition(position);
+
+
+                        switch (menuItem.getItemId()) {
+
+                            // rename
+                            case 0:
+                                ((BlocNotes) getActivity()).onNotebookRename(notebook, position);
+                                break;
+
+                            // delete
+                            case 1:
+                                ((BlocNotes) getActivity()).onNotebookDelete(notebook);
+                                break;
+                        }
+
+                        return false;
+                    }
+                });
+
+                popupMenu.show();
+
+                return true;
+
             }
         });
 
@@ -305,6 +349,8 @@ public class NavigationDrawerFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
+
+
     /**
      * Per the navigation drawer design guidelines, updates the action bar to show the global app
      * 'context', rather than just what's in the current screen.
@@ -337,6 +383,24 @@ public class NavigationDrawerFragment extends Fragment {
     public void onDatabaseUpdated(Notebook notebook) {
 
         mNotebookAdapter.add(notebook);
+
+    }
+
+    /**
+     *  When a notebook has been deleted, remove it from the list
+     *
+     */
+    public void removeNotebook(Notebook notebook) {
+
+        mNotebookAdapter.remove(notebook);
+    }
+
+    public void renameNotebook(int position, String newName) {
+
+        Notebook notebook = (Notebook) mNotebookAdapter.getItem(position);
+        notebook.setName(newName);
+
+        mNotebookAdapter.notifyDataSetChanged();
 
     }
 }

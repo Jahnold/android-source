@@ -3,6 +3,7 @@ package com.bloc.blocnotes;
 import android.app.Activity;
 
 import android.app.ActionBar;
+import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.ContentValues;
@@ -26,11 +27,13 @@ import android.support.v4.widget.DrawerLayout;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.bloc.blocnotes.models.Note;
 import com.bloc.blocnotes.models.Notebook;
 import com.bloc.blocnotes.ui.CustomStyleDialogFragment;
 import com.bloc.blocnotes.ui.NewNotebookFragment;
 import com.bloc.blocnotes.ui.NoteFragment;
 import com.bloc.blocnotes.ui.NotebookFragment;
+import com.bloc.blocnotes.ui.RenameNotebookDialogFragment;
 import com.bloc.blocnotes.ui.SettingsFragment;
 
 import java.util.HashMap;
@@ -38,7 +41,8 @@ import java.util.Map;
 
 
 public class BlocNotes extends Activity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks,
+                   RenameNotebookDialogFragment.RenameDialogListener {
 
     private static final String TAG = "BlocNotesActivity";
 
@@ -233,6 +237,64 @@ public class BlocNotes extends Activity
                 .addToBackStack(null)
                 .commit();
 
+    }
+
+    public void onNoteDelete(Note note) {
+
+        // delete note
+        note.delete();
+
+        // update note list
+        mNotebookFragment.removeNote(note);
+
+        // show a toast confirming action
+
+    }
+
+    public void onNotebookDelete(Notebook notebook) {
+
+        // delete notebook
+        notebook.delete();
+
+        // update the nav draw
+        mNavigationDrawerFragment.removeNotebook(notebook);
+
+        // show a toast confirming action
+
+    }
+
+    public void onNotebookRename(Notebook notebook, int postition) {
+
+        // create dialog
+        RenameNotebookDialogFragment dialog = new RenameNotebookDialogFragment();
+
+        // pass the notebook id to the dialog
+        Bundle args = new Bundle();
+        args.putLong("notebookId", notebook.getId());
+        args.putInt("notebookPosition", postition);
+        dialog.setArguments(args);
+
+        // show the dialog
+        dialog.show(getFragmentManager(), "RenameNotebookDialogFragment");
+
+    }
+
+    public void onRenameConfirm(DialogFragment dialog, String newName) {
+
+        // get the dialog bundle
+        Bundle args = dialog.getArguments();
+
+        // create a notebook object from the id
+        Notebook notebook = new Notebook(args.getLong("notebookId"));
+
+        // set the new name
+        notebook.setName(newName);
+
+        // save
+        notebook.save();
+
+        // update the nav list
+        mNavigationDrawerFragment.renameNotebook(args.getInt("notebookPosition"), newName);
     }
 
     /* Load and set any shared preferences for font & size

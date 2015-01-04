@@ -70,6 +70,11 @@ public abstract class Model {
         setLoaded(true);
     }
 
+    /**
+     *  Save the contents of the current object to the db
+     *  If it already has an ID then do an update
+     *  If not create a new entry
+    */
     public final void save() {
 
         ContentValues values = _getContentValues();
@@ -93,13 +98,28 @@ public abstract class Model {
             db.update(
                     mTableName,
                     values,
-                    "_id=",
-                    new String[] {String.valueOf(getId())}
+                    "_id = ? ",
+                    new String[] {String.valueOf(mId)}
             );
         }
 
         db.close();
 
+    }
+
+    /**
+     *  Delete the entry which corresponds to this object from the db
+    */
+    public final void delete() {
+
+        // first check we have a valid ID
+        if (mId != 0) {
+
+            SQLiteDatabase db = BlocNotesApplication.getDB().getWritableDatabase();
+            db.delete(mTableName, "_id = ?", new String[] {String.valueOf(mId)});
+
+            db.close();
+        }
 
     }
 

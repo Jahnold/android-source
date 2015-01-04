@@ -26,6 +26,11 @@
     <string name="new_notebook_label">Notebook Name</string>
     <string name="new_notebook_btn_confirm">Create Notebook</string>
 
+    <string name="rename_notebook_dialog_title">Rename Notebook</string>
+    <string name="rename_notebook_label">New Notebook Name</string>
+    <string name="rename_notebook_btn">Rename</string>
+    <string name="rename_notebook_cancel">Cancel</string>
+
     <string name="empty_notebook_text">Oh Noes!\n\nThere are no notes in this notebook.\nClick below to start a new one.</string>
     <string name="new_note_btn">New Note</string>
 </resources>

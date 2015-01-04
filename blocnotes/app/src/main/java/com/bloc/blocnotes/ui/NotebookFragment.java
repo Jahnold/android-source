@@ -18,13 +18,14 @@ import com.bloc.blocnotes.models.Notebook;
 import java.util.ArrayList;
 
 /**
- * A simple {@link Fragment} subclass.
+ * Fragment shows a list of all notes in a notebook
  */
 public class NotebookFragment extends Fragment {
 
 
     private Notebook mNotebook;                         // the notebook we're expanding
     private ArrayList<Note> mNotesList;
+    private NoteArrayAdapter mNoteArrayAdapter;
 
     public NotebookFragment() {
         // Required empty public constructor
@@ -60,7 +61,7 @@ public class NotebookFragment extends Fragment {
                     public void run() {
 
                         // use our custom note array adapter
-                        NoteArrayAdapter noteArrayAdapter = new NoteArrayAdapter(
+                        mNoteArrayAdapter = new NoteArrayAdapter(
                                 getActivity(),
                                 android.R.layout.simple_list_item_activated_1,
                                 mNotesList
@@ -70,7 +71,7 @@ public class NotebookFragment extends Fragment {
                         notesListView.setEmptyView(emptyNotesListView);
 
                         // set our adapter to our list view
-                        notesListView.setAdapter(noteArrayAdapter);
+                        notesListView.setAdapter(mNoteArrayAdapter);
 
                     }
                 });
@@ -79,8 +80,8 @@ public class NotebookFragment extends Fragment {
         }.start();
 
         // set the title of our app to the name of the notebook
-        ActionBar actionBar = getActivity().getActionBar();
-        actionBar.setTitle(mNotebook.getName());
+        //ActionBar actionBar = getActivity().getActionBar();
+        //actionBar.setTitle(mNotebook.getName());
 
         return v;
     }
@@ -92,6 +93,12 @@ public class NotebookFragment extends Fragment {
     public void setUp(Notebook notebook) {
 
         mNotebook = notebook;
+
+    }
+
+    public void removeNote(Note note) {
+
+        mNoteArrayAdapter.remove(note);
 
     }
 
