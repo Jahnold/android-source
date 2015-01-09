@@ -17,8 +17,8 @@ public abstract class Model {
     // partial constructor
     public Model(String table, long id) {
 
-        // run the full constructor default lazy to true
-        this(table, id, true);
+        // run the full constructor default lazy to false
+        this(table, id, false);
 
     }
 

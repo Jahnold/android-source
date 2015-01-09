@@ -7,9 +7,12 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import com.bloc.blocnotes.BlocNotes;
 import com.bloc.blocnotes.R;
 import com.bloc.blocnotes.models.Note;
 import com.bloc.blocnotes.models.NoteCentre;
@@ -73,6 +76,17 @@ public class NotebookFragment extends Fragment {
                         // set our adapter to our list view
                         notesListView.setAdapter(mNoteArrayAdapter);
 
+                        // add a listener for when a user clicks a new
+                        notesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                                // pass the note to the method in the activity
+                                ((BlocNotes) getActivity()).onEditNote(mNoteArrayAdapter.getItem(i));
+
+                            }
+                        });
+
                     }
                 });
             }
@@ -82,6 +96,19 @@ public class NotebookFragment extends Fragment {
         // set the title of our app to the name of the notebook
         //ActionBar actionBar = getActivity().getActionBar();
         //actionBar.setTitle(mNotebook.getName());
+
+        // add a listener to the new note button
+        Button newNote = (Button) v.findViewById(R.id.btn_new_note);
+        newNote.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                ((BlocNotes) getActivity()).onNewNote(mNotebook.getId());
+
+            }
+        });
+
+
 
         return v;
     }

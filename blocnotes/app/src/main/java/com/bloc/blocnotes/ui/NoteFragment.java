@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.bloc.blocnotes.BlocNotes;
 import com.bloc.blocnotes.R;
+import com.bloc.blocnotes.models.Note;
 
 
 public class NoteFragment extends Fragment {
@@ -31,6 +32,8 @@ public class NoteFragment extends Fragment {
     private Typeface mHelvetica;
     private Typeface mHelveticaNeue;
     private Typeface mImpact;
+
+    private Note mNote;     // the note which is being edited
 
     public NoteFragment() {
 
@@ -55,7 +58,6 @@ public class NoteFragment extends Fragment {
         // create a reference to our editText to use elsewhere in the class
         mEditText = (EditText) v.findViewById(R.id.et_note);
 
-
         mHelvetica = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Helvetica_Reg.ttf");
         mHelveticaNeue = Typeface.createFromAsset(getActivity().getAssets(), "fonts/HelveticaNeue_Lt.ttf");
         mImpact = Typeface.createFromAsset(getActivity().getAssets(), "fonts/impact.ttf");
@@ -74,15 +76,17 @@ public class NoteFragment extends Fragment {
 
     }
 
-    /*
-        save the fragment state
-    */
     @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
+    public void onPause() {
+        super.onPause();
 
-        // run the super
-        super.onSaveInstanceState(savedInstanceState);
+        // update the background note and save to the db
+        if (mNote != null) {
 
+            mNote.setText(mEditText.getText().toString());
+            mNote.save();
+
+        }
     }
 
     /*
@@ -102,7 +106,7 @@ public class NoteFragment extends Fragment {
 
     }
 
-    /*
+    /**
     *   This is where the menu item events are caught
     */
     @Override
@@ -124,7 +128,7 @@ public class NoteFragment extends Fragment {
 
     }
 
-    /*  Change the font of the EditText to whichever font is passed in
+    /**  Change the font of the EditText to whichever font is passed in
     *
     *   @param font the name of the chosen font
     */
@@ -163,5 +167,15 @@ public class NoteFragment extends Fragment {
         }
     }
 
+    /**
+     *   Sets the edit text to display the text of the given note
+     *   and puts the note into mNote
+    */
+    public void setNote(Note note) {
+
+        mNote = note;
+        mEditText.setText(mNote.getText());
+        Log.d("text:", mNote.getText());
+    }
 
 }

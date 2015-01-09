@@ -94,6 +94,7 @@ public class NoteArrayAdapter extends ArrayAdapter<Note>{
                 popupMenu.show();
             }
         });
+        threeDots.setFocusable(false);
 
         return convertView;
     }

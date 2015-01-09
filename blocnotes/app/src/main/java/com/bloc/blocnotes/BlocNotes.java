@@ -356,11 +356,44 @@ public class BlocNotes extends Activity
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         alarmManager.set(
                 AlarmManager.RTC_WAKEUP,
-                //System.currentTimeMillis() + remindIn * 60 * 1000,
-                System.currentTimeMillis() + 500,       // for testing
+                System.currentTimeMillis() + remindIn * 60 * 1000,
                 pendingIntent
         );
 
+    }
+
+    public void onNewNote(long notebookId) {
+
+        // create a new note
+        Note note = new Note(0);
+        note.setNotebookId(notebookId);
+        note.setText("");
+        note.save();
+
+        mNoteFragment.setNote(note);
+
+        getFragmentManager()
+                .beginTransaction()
+                .replace(R.id.container,mNoteFragment)
+                .addToBackStack(null)
+                .commit();
+
+    }
+
+    public void onEditNote(Note note) {
+
+        // create a new Note Fragment
+        //mNoteFragment = (NoteFragment) getFragmentManager().findFragmentByTag("fragment_note");
+
+        // swap in the note fragment
+        getFragmentManager()
+                .beginTransaction()
+                .replace(R.id.container,mNoteFragment)
+                .addToBackStack(null)
+                .commit();
+
+        // set the note fragment to the given note
+        mNoteFragment.setNote(note);
     }
 
     /* Load and set any shared preferences for font & size
