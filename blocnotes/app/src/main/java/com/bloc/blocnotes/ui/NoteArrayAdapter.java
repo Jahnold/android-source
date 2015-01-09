@@ -59,6 +59,7 @@ public class NoteArrayAdapter extends ArrayAdapter<Note>{
 
         final PopupMenu popupMenu = new PopupMenu(getContext(), threeDots);
         popupMenu.getMenu().add(Menu.NONE, 0, Menu.NONE, "Delete Note");
+        popupMenu.getMenu().add(Menu.NONE, 1, Menu.NONE, "Remind Me");
 
         // set up the listener for when a user chooses a menu item
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -70,6 +71,13 @@ public class NoteArrayAdapter extends ArrayAdapter<Note>{
 
                         // delete note
                         ((BlocNotes) getContext()).onNoteDelete(note);
+                        break;
+
+                    case 1:
+
+                        // remind me
+                        ((BlocNotes) getContext()).onSetReminder(note);
+                        break;
 
                 }
 

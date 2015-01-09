@@ -13,10 +13,19 @@
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <receiver android:name=".ReminderReceiver">
+            <intent-filter>
+                <action android:name="com.bloc.notify" />
+                <action android:name="com.bloc.edit" />
+                <action android:name="com.bloc.snooze" />
+                <action android:name="com.bloc.delete" />
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>

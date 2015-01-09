@@ -57,7 +57,7 @@ public abstract class Model {
                 true,                                       // DISTINCT
                 mTableName,                                 // FROM
                 null,                                       // SELECT (*)
-                "_id=",                                     // WHERE
+                "_id=?",                                    // WHERE
                 new String[] {String.valueOf(getId())},     // values
                 null,
                 null,

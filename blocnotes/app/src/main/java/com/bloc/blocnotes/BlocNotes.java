@@ -3,11 +3,14 @@ package com.bloc.blocnotes;
 import android.app.Activity;
 
 import android.app.ActionBar;
+import android.app.AlarmManager;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
@@ -34,6 +37,7 @@ import com.bloc.blocnotes.ui.NewNotebookFragment;
 import com.bloc.blocnotes.ui.NoteFragment;
 import com.bloc.blocnotes.ui.NotebookFragment;
 import com.bloc.blocnotes.ui.RenameNotebookDialogFragment;
+import com.bloc.blocnotes.ui.SetReminderDialogFragment;
 import com.bloc.blocnotes.ui.SettingsFragment;
 
 import java.util.HashMap;
@@ -42,7 +46,10 @@ import java.util.Map;
 
 public class BlocNotes extends Activity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks,
-                   RenameNotebookDialogFragment.RenameDialogListener {
+                   RenameNotebookDialogFragment.RenameDialogListener,
+                   SetReminderDialogFragment.SetReminderListener
+
+{
 
     private static final String TAG = "BlocNotesActivity";
 
@@ -295,6 +302,65 @@ public class BlocNotes extends Activity
 
         // update the nav list
         mNavigationDrawerFragment.renameNotebook(args.getInt("notebookPosition"), newName);
+    }
+
+    public void onSetReminder(Note note) {
+
+        // create dialog
+        SetReminderDialogFragment dialog = new SetReminderDialogFragment();
+
+        // pass in the id of the note to the dialog
+        Bundle args = new Bundle();
+        args.putLong("noteId", note.getId());
+        dialog.setArguments(args);
+
+        // show the dialog
+        dialog.show(getFragmentManager(), "SetNotificationDialogFragment");
+
+    }
+
+    public void onSetReminderConfirm(DialogFragment dialog, int time) {
+
+        // get the note id
+        long noteId = dialog.getArguments().getLong("noteId");
+
+        // work out how long to wait before reminding
+        int remindIn = 0;
+
+        switch (time) {
+
+            case 0:
+                remindIn = 5;
+                break;
+            case 1:
+                remindIn = 10;
+                break;
+            case 2:
+                remindIn = 30;
+                break;
+            case 3:
+                remindIn = 60;
+                break;
+        }
+
+        // create a new intent, set its action and add the noteId
+        Intent reminderIntent = new Intent(this, ReminderReceiver.class);
+        reminderIntent.setAction("com.bloc.notify");
+        reminderIntent.putExtra("noteId", noteId);
+
+        // create a pending intent based on our intent
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, reminderIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        // set an alarm for the intent
+        // convert the remindIn time into milliseconds
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(
+                AlarmManager.RTC_WAKEUP,
+                //System.currentTimeMillis() + remindIn * 60 * 1000,
+                System.currentTimeMillis() + 500,       // for testing
+                pendingIntent
+        );
+
     }
 
     /* Load and set any shared preferences for font & size
