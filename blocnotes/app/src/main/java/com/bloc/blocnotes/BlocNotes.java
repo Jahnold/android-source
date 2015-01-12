@@ -143,6 +143,7 @@ public class BlocNotes extends Activity
                 // load the settings fragment
                 getFragmentManager()
                         .beginTransaction()
+                        .setCustomAnimations(R.animator.fade_in,R.animator.fade_out)
                         .replace(R.id.container, new SettingsFragment())
                         .addToBackStack(null)
                         .commit();

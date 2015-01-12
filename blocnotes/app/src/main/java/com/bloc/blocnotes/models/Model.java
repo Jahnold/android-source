@@ -51,6 +51,11 @@ public abstract class Model {
             return;
         }
 
+        // or that it has an id of 0
+        if (mId == 0) {
+            return;
+        }
+
         // load a single row from the table which matches the id
         SQLiteDatabase db = BlocNotesApplication.getDB().getReadableDatabase();
         Cursor row = db.query(
