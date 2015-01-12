@@ -129,4 +129,10 @@ public class NotebookFragment extends Fragment {
 
     }
 
+    public void refresh() {
+
+        mNoteArrayAdapter.notifyDataSetChanged();
+
+    }
+
 }

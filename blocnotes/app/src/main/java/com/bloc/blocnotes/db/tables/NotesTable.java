@@ -26,5 +26,17 @@ public class NotesTable extends Table {
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase sqlLiteDatabase, int oldVersion, int NewVersion) {}
+    public void onUpgrade(SQLiteDatabase sqlLiteDatabase, int oldVersion, int NewVersion) {
+
+        // for version 2 add the 'image_url' field to the notes table
+        if (oldVersion == 1 & NewVersion == 2) {
+
+            sqlLiteDatabase.execSQL(
+                    "ALTER TABLE Notes " +
+                    "ADD COLUMN image_url TEXT"
+            );
+
+        }
+
+    }
 }

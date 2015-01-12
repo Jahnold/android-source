@@ -11,20 +11,20 @@ import android.widget.EditText;
 
 import com.bloc.blocnotes.R;
 
+/**
+ * Created by matthewarnold on 12/01/15.
+ *
+ */
+public class AddImageDialogFragment extends DialogFragment {
 
+    public AddImageDialogFragment() {}
 
-public class RenameNotebookDialogFragment extends DialogFragment {
+    public interface AddImageListener {
 
-    public RenameNotebookDialogFragment() {
-        // Required empty public constructor
+        public void onAddImageConfirm(DialogFragment dialog, String imageURL);
     }
 
-    public interface RenameDialogListener {
-        public void onRenameConfirm(DialogFragment dialog, String newName);
-        //public void onDialogNegativeClick(DialogFragment dialog);
-    }
-
-    RenameDialogListener mListener;
+    AddImageListener mListener;
 
     @Override
     public void onAttach(Activity activity) {
@@ -32,14 +32,15 @@ public class RenameNotebookDialogFragment extends DialogFragment {
         super.onAttach(activity);
 
         try {
-            mListener = (RenameDialogListener) activity;
+            mListener = (AddImageListener) activity;
         }
         catch (ClassCastException e) {
             // Activity doesn't implement interface, throw exception
-            throw new ClassCastException(activity.toString() + "must implement RenameDialogListener");
+            throw new ClassCastException(activity.toString() + "must implement AddImageListener");
         }
     }
 
+    @Override
     public Dialog onCreateDialog(Bundle bundle) {
 
         // create a builder
@@ -49,21 +50,22 @@ public class RenameNotebookDialogFragment extends DialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
         // inflate and set the view for the dialog
-        builder.setView(inflater.inflate(R.layout.fragment_rename_notebook_dialog, null));
+        builder.setView(inflater.inflate(R.layout.fragment_add_image_dialog, null));
 
         // set the title
-        builder.setTitle(R.string.rename_notebook_dialog_title);
+        builder.setTitle(R.string.add_image_dialog_title);
 
         // set the buttons
-        builder.setPositiveButton(R.string.rename_notebook_btn, new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(R.string.add_image_dialog_btn, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
                 // get the new name
-                EditText editText = (EditText) getDialog().findViewById(R.id.et_notebook_name);
+                EditText editText = (EditText) getDialog().findViewById(R.id.et_image_url);
 
                 // user clicked rename, run the positive method in the calling activity
-                mListener.onRenameConfirm(RenameNotebookDialogFragment.this, editText.getText().toString());
+                mListener.onAddImageConfirm(AddImageDialogFragment.this, editText.getText().toString());
+                //mListener.onAddImageConfirm(AddImageDialogFragment.this, "http://www.google.co.uk/images/srpr/logo11w.png");
             }
         });
 
@@ -76,6 +78,6 @@ public class RenameNotebookDialogFragment extends DialogFragment {
         });
 
         return builder.create();
-    }
 
+    }
 }

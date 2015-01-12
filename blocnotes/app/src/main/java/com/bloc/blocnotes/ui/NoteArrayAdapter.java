@@ -1,6 +1,9 @@
 package com.bloc.blocnotes.ui;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -8,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
@@ -15,6 +19,7 @@ import com.bloc.blocnotes.BlocNotes;
 import com.bloc.blocnotes.R;
 import com.bloc.blocnotes.models.Note;
 
+import java.io.File;
 import java.util.ArrayList;
 
 
@@ -46,12 +51,21 @@ public class NoteArrayAdapter extends ArrayAdapter<Note>{
 
         if (note != null) {
 
-            // get refs to the TextView
+            // get ref to the TextView
             TextView text = (TextView) convertView.findViewById(R.id.txt_notebook_note);
 
             // assign the values from the current notebook
             text.setText(note.getText());
 
+            // get ref to the ImageView
+            ImageView imageView = (ImageView) convertView.findViewById(R.id.image_note);
+
+            // try and laod the image from the cache
+            Bitmap image = bitmapFromCache(note.getId() + ".png");
+
+            if (image != null) {
+                imageView.setImageBitmap(image);
+            }
         }
 
         // set up the menu
@@ -60,6 +74,7 @@ public class NoteArrayAdapter extends ArrayAdapter<Note>{
         final PopupMenu popupMenu = new PopupMenu(getContext(), threeDots);
         popupMenu.getMenu().add(Menu.NONE, 0, Menu.NONE, "Delete Note");
         popupMenu.getMenu().add(Menu.NONE, 1, Menu.NONE, "Remind Me");
+        popupMenu.getMenu().add(Menu.NONE, 2, Menu.NONE, "Add Image");
 
         // set up the listener for when a user chooses a menu item
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -79,6 +94,11 @@ public class NoteArrayAdapter extends ArrayAdapter<Note>{
                         ((BlocNotes) getContext()).onSetReminder(note);
                         break;
 
+                    case 2:
+
+                        // add image
+                        ((BlocNotes) getContext()).onAddImage(note);
+
                 }
 
                 return false;
@@ -97,6 +117,28 @@ public class NoteArrayAdapter extends ArrayAdapter<Note>{
         threeDots.setFocusable(false);
 
         return convertView;
+    }
+
+    public Bitmap bitmapFromCache(String name) {
+
+        String extState = Environment.getExternalStorageState();
+        if (!(extState.equals(Environment.MEDIA_MOUNTED) ||
+                extState.equals(Environment.MEDIA_MOUNTED_READ_ONLY))) {
+            return null;
+        }
+        String photoPath = getContext().getExternalCacheDir() + File.separator + name;
+        File photoFile = new File(photoPath);
+
+        // Check if the file exists
+        if (!photoFile.exists()) {
+            // Returning null signifies that the file is not in cache
+            return null;
+        }
+        // Re-create the bitmap from the raw data saved during `saveImageToSD`
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+        return BitmapFactory.decodeFile(photoPath, options);
+
     }
 
 }

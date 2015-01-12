@@ -11,6 +11,7 @@ public class Note extends Model {
 
     private String mText;
     private long mNotebookId;
+    private String mImageURL;
 
     // gets and sets
     public String getText() { return mText; }
@@ -18,6 +19,9 @@ public class Note extends Model {
 
     public long getNotebookId() { return  mNotebookId; }
     public void  setNotebookId(long id) { this.mNotebookId = id; }
+
+    public String getImageURL() { return  mImageURL; }
+    public void setImageURL(String iURL) { this.mImageURL = iURL;}
 
     public Note(long id) {
         super("Notes", id);
@@ -30,6 +34,7 @@ public class Note extends Model {
         // load the name from the cursor
         mText = row.getString(row.getColumnIndex("text"));
         mNotebookId = row.getLong(row.getColumnIndex("notebook_id"));
+        mImageURL = row.getString(row.getColumnIndex("image_url"));
 
     }
 

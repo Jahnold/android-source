@@ -13,10 +13,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -32,6 +35,7 @@ import android.widget.TextView;
 
 import com.bloc.blocnotes.models.Note;
 import com.bloc.blocnotes.models.Notebook;
+import com.bloc.blocnotes.ui.AddImageDialogFragment;
 import com.bloc.blocnotes.ui.CustomStyleDialogFragment;
 import com.bloc.blocnotes.ui.NewNotebookFragment;
 import com.bloc.blocnotes.ui.NoteFragment;
@@ -40,14 +44,23 @@ import com.bloc.blocnotes.ui.RenameNotebookDialogFragment;
 import com.bloc.blocnotes.ui.SetReminderDialogFragment;
 import com.bloc.blocnotes.ui.SettingsFragment;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.Map;
 
 
 public class BlocNotes extends Activity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks,
-                   RenameNotebookDialogFragment.RenameDialogListener,
-                   SetReminderDialogFragment.SetReminderListener
+        implements  NavigationDrawerFragment.NavigationDrawerCallbacks,
+                    RenameNotebookDialogFragment.RenameDialogListener,
+                    SetReminderDialogFragment.SetReminderListener,
+                    AddImageDialogFragment.AddImageListener
 
 {
 
@@ -414,4 +427,87 @@ public class BlocNotes extends Activity
 
     }
 
+    public void onAddImage(Note note) {
+
+        // create dialog
+        AddImageDialogFragment dialog = new AddImageDialogFragment();
+
+        // pass in the id of the note to the dialog
+        Bundle args = new Bundle();
+        args.putLong("noteId", note.getId());
+        dialog.setArguments(args);
+
+        // show the dialog
+        dialog.show(getFragmentManager(), "SetNotificationDialogFragment");
+
+    }
+
+    public void onAddImageConfirm(DialogFragment dialog, final String imageURL) {
+
+        // get the note
+        final long noteId = dialog.getArguments().getLong("noteId");
+        Note note = new Note(noteId);
+
+        // set the new imageURL and save
+        note.setImageURL(imageURL);
+        note.save();
+
+        // download the image and save it to the cache
+
+        new Thread() {
+
+            @Override
+            public void run() {
+
+                super.run();
+
+                // try and download the image
+                Bitmap image = null;
+                try {
+                    URL url = new URL(imageURL);
+                    URLConnection connection = url.openConnection();
+                    InputStream inputStream = connection.getInputStream();
+                    image = BitmapFactory.decodeStream(inputStream);
+                }
+                catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                // save to external storage
+                // use the note id as a filename
+                saveImageToSD(image, String.valueOf(noteId) + ".png");
+
+                // update the notes list
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mNotebookFragment.refresh();
+                    }
+                });
+            }
+        }.start();
+
+    }
+
+    public void saveImageToSD(Bitmap image, String name) {
+        if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+            return;
+        }
+
+        ByteArrayOutputStream imageBytes = new ByteArrayOutputStream();
+        image.compress(Bitmap.CompressFormat.PNG, 100, imageBytes);
+        File extCache = getExternalCacheDir();
+        File cachedImageFile = new File(extCache.getAbsolutePath() + File.separator + name);
+
+        try {
+            cachedImageFile.createNewFile();
+            FileOutputStream fos = new FileOutputStream(cachedImageFile);
+            fos.write(imageBytes.toByteArray());
+            fos.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
